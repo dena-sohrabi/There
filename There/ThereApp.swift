@@ -10,8 +10,12 @@ import SwiftUI
 @main
 struct ThereApp: App {
     var body: some Scene {
-        WindowGroup {
+        MenuBarExtra {
             ContentView()
+        } label: {
+            Image(systemName: "clock")
         }
+        .menuBarExtraStyle(.window)
+        
     }
 }
