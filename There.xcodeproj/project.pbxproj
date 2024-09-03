@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DF82C8763570067CF04 /* KeychainSwift */; };
+		C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DFB2C87643C0067CF04 /* CryptoSwift */; };
+		C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C357E5D02C877376003F9943 /* MenuBarExtraAccess */; };
+		C38562332C8719CB00858D54 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C38562322C8719CB00858D54 /* GRDB */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C325D0E62C85A9600049EFC8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +59,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */,
+				C38562332C8719CB00858D54 /* GRDB in Frameworks */,
+				C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */,
+				C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +123,10 @@
 			);
 			name = There;
 			packageProductDependencies = (
+				C38562322C8719CB00858D54 /* GRDB */,
+				C3162DF82C8763570067CF04 /* KeychainSwift */,
+				C3162DFB2C87643C0067CF04 /* CryptoSwift */,
+				C357E5D02C877376003F9943 /* MenuBarExtraAccess */,
 			);
 			productName = There;
 			productReference = C325D0D42C85A95F0049EFC8 /* There.app */;
@@ -195,6 +210,12 @@
 			);
 			mainGroup = C325D0CB2C85A95F0049EFC8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C38562312C8719CB00858D54 /* XCLocalSwiftPackageReference "../../Downloads/GRDB.swift-master" */,
+				C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */,
+				C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */,
+				C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C325D0D52C85A95F0049EFC8 /* Products */;
 			projectDirPath = "";
@@ -396,7 +417,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -410,15 +431,16 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pm.there.There;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 7;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -436,7 +458,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -450,15 +472,16 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pm.there.There;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 7;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -593,6 +616,44 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/keychain-swift-master";
+		};
+		C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/CryptoSwift-main";
+		};
+		C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/MenuBarExtraAccess-main";
+		};
+		C38562312C8719CB00858D54 /* XCLocalSwiftPackageReference "../../Downloads/GRDB.swift-master" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/GRDB.swift-master";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C3162DF82C8763570067CF04 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeychainSwift;
+		};
+		C3162DFB2C87643C0067CF04 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CryptoSwift;
+		};
+		C357E5D02C877376003F9943 /* MenuBarExtraAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MenuBarExtraAccess;
+		};
+		C38562322C8719CB00858D54 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C325D0CC2C85A95F0049EFC8 /* Project object */;
 }
