@@ -20,7 +20,12 @@ struct ThereApp: App {
             ContentView()
                 .environment(\.database, .shared)
                 .frame(width: 300, height: 400)
-
+                .overlay(alignment: .topTrailing) {
+                    Button("Open in new Window") {
+                        openWindow(id: "app")
+                    }
+                    .padding(4)
+                }
         } label: {
             Image(systemName: "clock")
                 .onAppear {
@@ -38,6 +43,17 @@ struct ThereApp: App {
             .windowManagerRole(.principal)
         #endif
 
+        Window("There", id: "app") {
+            ContentView()
+                .environment(\.database, .shared)
+                .frame(width: 300, height: 400)
+                .background(TransparentBackgroundView().ignoresSafeArea())
+        }
+        .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 300, height: 400)
+        .defaultPosition(.topLeading)
+        .windowResizability(.contentSize)
+
         Window("init", id: "init") {
             InitialView()
                 .environment(\.database, .shared)
@@ -52,6 +68,41 @@ struct ThereApp: App {
         #if MAC_OS_VERSION_15_0
             .windowBackgroundDragBehavior(.enabled)
         #endif
+
+        Window("Add Person", id: "add-person") {
+            AddPersonView()
+                .environment(\.database, .shared)
+                .frame(width: 400, height: 400)
+        }
+        .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 400, height: 400)
+        .defaultPosition(.center)
+        .windowResizability(.contentSize)
+        #if MAC_OS_VERSION_15_0
+            .windowBackgroundDragBehavior(.enabled)
+        #endif
+
+        Window("Add Place", id: "add-place") {
+            AddPlaceView()
+                .environment(\.database, .shared)
+                .frame(width: 400, height: 400)
+        }
+        .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 400, height: 400)
+        .defaultPosition(.center)
+        .windowResizability(.contentSize)
+        #if MAC_OS_VERSION_15_0
+            .windowBackgroundDragBehavior(.enabled)
+        #endif
+
+        Settings {
+            Text("Coming soon...")
+        }
+        #if MAC_OS_VERSION_15_0
+            .windowStyle(.plain)
+        #endif
+            .defaultSize(width: 600, height: 400)
+            .windowResizability(.automatic)
     }
 }
 
@@ -63,7 +114,7 @@ class AppState: ObservableObject {
     static let shared = AppState()
     @Published var menuBarViewIsPresented: Bool = false
     func presentMenu() {
-        menuBarViewIsPresented = true
+//        menuBarViewIsPresented = true
     }
 }
 
@@ -73,4 +124,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            AppState.shared.menuBarViewIsPresented = true
 //        }
     }
+}
+
+struct TransparentBackgroundView: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSVisualEffectView {
+        let view = NSVisualEffectView()
+        view.blendingMode = .behindWindow
+        view.state = .active
+        view.material = .popover
+        return view
+    }
+
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }

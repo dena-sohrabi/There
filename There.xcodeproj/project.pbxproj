@@ -11,6 +11,7 @@
 		C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DFB2C87643C0067CF04 /* CryptoSwift */; };
 		C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C357E5D02C877376003F9943 /* MenuBarExtraAccess */; };
 		C38562332C8719CB00858D54 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C38562322C8719CB00858D54 /* GRDB */; };
+		C398A8902C8A1B9500891388 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = C398A88F2C8A1B9500891388 /* SymbolPicker */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,9 +37,33 @@
 		C325D0EF2C85A9600049EFC8 /* ThereUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThereUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C398A8592C89D62E00891388 /* Exceptions for "There" folder in "There" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Views/CLAuthorizationStatus+Description.swift ",
+			);
+			target = C325D0D32C85A95F0049EFC8 /* There */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		C398A85A2C89D62E00891388 /* Exceptions for "There" folder in "Compile Sources" phase from "There" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = C325D0D02C85A95F0049EFC8 /* Sources */;
+			membershipExceptions = (
+				"Views/CLAuthorizationStatus+Description.swift ",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C325D0D62C85A95F0049EFC8 /* There */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C398A8592C89D62E00891388 /* Exceptions for "There" folder in "There" target */,
+				C398A85A2C89D62E00891388 /* Exceptions for "There" folder in "Compile Sources" phase from "There" target */,
+			);
 			path = There;
 			sourceTree = "<group>";
 		};
@@ -63,6 +88,7 @@
 				C38562332C8719CB00858D54 /* GRDB in Frameworks */,
 				C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */,
 				C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */,
+				C398A8902C8A1B9500891388 /* SymbolPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +153,7 @@
 				C3162DF82C8763570067CF04 /* KeychainSwift */,
 				C3162DFB2C87643C0067CF04 /* CryptoSwift */,
 				C357E5D02C877376003F9943 /* MenuBarExtraAccess */,
+				C398A88F2C8A1B9500891388 /* SymbolPicker */,
 			);
 			productName = There;
 			productReference = C325D0D42C85A95F0049EFC8 /* There.app */;
@@ -215,6 +242,8 @@
 				C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */,
 				C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */,
 				C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */,
+				C398A88B2C8A18B100891388 /* XCLocalSwiftPackageReference "../../Downloads/MCEmojiPicker-main" */,
+				C398A88E2C8A1B9500891388 /* XCLocalSwiftPackageReference "../../Downloads/SymbolPicker-main" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C325D0D52C85A95F0049EFC8 /* Products */;
@@ -409,6 +438,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = There/There.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -418,6 +448,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs access to your location to provide location-based services";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -450,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = There/There.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -459,6 +491,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app needs access to your location to provide location-based services";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -634,6 +667,14 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../Downloads/GRDB.swift-master";
 		};
+		C398A88B2C8A18B100891388 /* XCLocalSwiftPackageReference "../../Downloads/MCEmojiPicker-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/MCEmojiPicker-main";
+		};
+		C398A88E2C8A1B9500891388 /* XCLocalSwiftPackageReference "../../Downloads/SymbolPicker-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/SymbolPicker-main";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -652,6 +693,10 @@
 		C38562322C8719CB00858D54 /* GRDB */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GRDB;
+		};
+		C398A88F2C8A1B9500891388 /* SymbolPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SymbolPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

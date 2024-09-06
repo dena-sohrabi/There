@@ -98,9 +98,18 @@ extension AppDatabase {
         #endif
 
         // Migrations for future application versions will be inserted here:
-        // migrator.registerMigration(...) { db in
-        //     ...
-        // }
+        migrator.registerMigration("add entry") { db in
+            try db.create(table: Entry.databaseTableName) { t in
+                t.primaryKey("id", .integer).notNull()
+                t.column(Entry.Columns.type.rawValue, .text).notNull()
+                t.column(Entry.Columns.name.rawValue, .text).notNull()
+                t.column(Entry.Columns.city.rawValue, .text).notNull()
+                t.column(Entry.Columns.country.rawValue, .text).notNull()
+                t.column(Entry.Columns.timezoneIdentifier.rawValue, .text).notNull()
+                t.column(Entry.Columns.flag.rawValue, .text)
+                t.column(Entry.Columns.photoData.rawValue, .text)
+            }
+        }
 
         return migrator
     }
