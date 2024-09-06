@@ -42,13 +42,16 @@ class SecureKeychainService {
     func saveEncrypted(_ value: String, forKey key: String) throws {
         let derivedKey = try deriveKey()
         let iv = AES.randomIV(AES.blockSize)
-        let encrypted = try AES(key: derivedKey, blockMode: CBC(iv: iv), padding: .pkcs7).encrypt(value.bytes)
+        let aes = try AES(key: derivedKey, blockMode: CBC(iv: iv), padding: .pkcs7)
+        let encrypted = try aes.encrypt(value.bytes)
         let encryptedData = iv + encrypted
         keychain.set(encryptedData.toBase64(), forKey: key)
     }
 
+
     func retrieveDecrypted(forKey key: String) throws -> String? {
-        guard let encryptedData = keychain.getData(key) else {
+        guard let encryptedBase64 = keychain.get(key),
+              let encryptedData = Data(base64Encoded: encryptedBase64) else {
             return nil
         }
 
