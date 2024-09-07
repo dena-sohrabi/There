@@ -69,21 +69,8 @@ struct ThereApp: App {
             .windowBackgroundDragBehavior(.enabled)
         #endif
 
-        Window("Add Person", id: "add-person") {
-            AddPersonView()
-                .environment(\.database, .shared)
-                .frame(width: 400, height: 400)
-        }
-        .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 400, height: 400)
-        .defaultPosition(.center)
-        .windowResizability(.contentSize)
-        #if MAC_OS_VERSION_15_0
-            .windowBackgroundDragBehavior(.enabled)
-        #endif
-
-        Window("Add Place", id: "add-place") {
-            AddPlaceView()
+        Window("Add Timezone", id: "add-timezone") {
+            AddTimezone()
                 .environment(\.database, .shared)
                 .frame(width: 400, height: 400)
         }
