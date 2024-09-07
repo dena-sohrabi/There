@@ -21,7 +21,6 @@ struct Input: View {
                 )
                 .stroke(isFocused ? Color.secondary.opacity(0.4) : Color.secondary.opacity(0.2), style: StrokeStyle(lineWidth: 3))
             )
-            .padding(.bottom)
             .focused($isFocused)
     }
 }
