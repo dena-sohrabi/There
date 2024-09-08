@@ -23,15 +23,16 @@ struct ThereApp: App {
                 .frame(width: 350)
                 .frame(minHeight: 200)
                 .frame(maxHeight: 400)
-                .padding(.top)
-                .overlay(alignment: .topTrailing) {
-                    Button("Open in new Window") {
-                        openWindow(id: "app")
-                    }
-                    .padding(4)
-                }
+                .padding(.top, 6)
         } label: {
-            Image(systemName: "clock")
+            let image: NSImage = {
+                let ratio = $0.size.height / $0.size.width
+                $0.size.height = 18
+                $0.size.width = 18 / ratio
+                return $0
+            }(NSImage(named: "Logo")!)
+
+            Image(nsImage: image)
                 .onAppear {
                     if UserDefaults.standard.bool(forKey: "hasCompletedInitialSetup") == false {
                         openWindow(id: "init")
@@ -103,14 +104,18 @@ class AppState: ObservableObject {
     static let shared = AppState()
     @Published var menuBarViewIsPresented: Bool = false
     func presentMenu() {
-//        menuBarViewIsPresented = true
+        menuBarViewIsPresented = true
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    @Environment(\.dismissWindow) var dismissWindow
+
     func applicationDidFinishLaunching(_ notification: Notification) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-//            AppState.shared.menuBarViewIsPresented = true
-//        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            AppState.shared.menuBarViewIsPresented = true
+            self.dismissWindow(id: "app")
+            self.dismissWindow(id: "add-timezone")
+        }
     }
 }
