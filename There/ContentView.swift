@@ -10,9 +10,9 @@ struct ContentView: View {
     @Environment(\.database) var database: AppDatabase
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: sortedEntries.isEmpty ? .center : .leading, spacing: 2) {
             if sortedEntries.isEmpty {
-                Text("Entries are empty")
+                EmptyTimezoneView()
             } else {
                 ScrollView(.vertical) {
                     LazyVStack(spacing: 0) {
