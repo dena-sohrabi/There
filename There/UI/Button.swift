@@ -84,6 +84,7 @@ struct SecondaryButton: View {
                 .foregroundColor(.primary.opacity(0.8))
                 .fontWeight(.medium)
                 .frame(width: 200, height: 32)
+                .padding(.horizontal, 6)
                 .background(
                     RoundedRectangle(
                         cornerRadius: 8,
@@ -91,6 +92,7 @@ struct SecondaryButton: View {
                     )
                     .stroke(hovered ? lightGray.opacity(0.6) : lightGray, lineWidth: 3)
                 )
+                .lineLimit(1)
         }
         .buttonStyle(.plain)
         .contentShape(Rectangle())
@@ -204,7 +206,7 @@ struct CompactPrimaryButton: View {
             Text(title)
                 .foregroundColor(.white)
                 .fontWeight(.medium)
-                .frame(width : width ,height: 32)
+                .frame(width: width, height: 32)
                 .padding(.horizontal, 6)
                 .background(
                     RoundedRectangle(
