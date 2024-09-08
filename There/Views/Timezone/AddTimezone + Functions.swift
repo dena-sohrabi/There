@@ -25,8 +25,6 @@ extension AddTimezone {
         }
     }
 
-
-
     func saveEntry() {
         let fileName = UUID().uuidString + ".png"
         let fileURL = getApplicationSupportDirectory().appendingPathComponent(fileName)
@@ -44,7 +42,7 @@ extension AddTimezone {
         do {
             try database.dbWriter.write { db in
                 let entry = Entry(
-                    id: Int64.random(in: 1...99999),
+                    id: Int64.random(in: 1 ... 99999),
                     type: selectedType,
                     name: name,
                     city: city,
@@ -65,6 +63,8 @@ extension AddTimezone {
         image = nil
         name = ""
         city = ""
+        showingXAccountInput = false
+        showingTGAccountInput = false
         selectedType = .person
         selectedTimeZone = TimeZone.current
         isShowingPopover = false

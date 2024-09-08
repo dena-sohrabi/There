@@ -42,10 +42,13 @@ struct IconSection: View {
                             }
                         }
                     )
+                    if image != nil {
+                        RemoveButton {
+                            image = nil
+                        }
+                    }
                 }
             }
-
-    
         }
     }
 }
@@ -61,6 +64,29 @@ struct SocialMediaButton: View {
                 .resizable()
                 .frame(width: 18, height: 18)
                 .clipShape(Circle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .scaleEffect(isHovered ? 1.1 : 1)
+        .shadow(color: isHovered ? .black.opacity(0.2) : .clear, radius: 4, x: 0, y: 4)
+        .onHover { hovering in
+            withAnimation {
+                isHovered = hovering
+            }
+        }
+    }
+}
+
+struct RemoveButton: View {
+    @State var isHovered: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "x.circle")
+                .resizable()
+                .frame(width: 18, height: 18)
+                .clipShape(Circle())
+                .foregroundColor(.secondary)
         }
         .buttonStyle(PlainButtonStyle())
         .scaleEffect(isHovered ? 1.1 : 1)
