@@ -55,12 +55,12 @@ struct ImageView: View {
                     .clipShape(Circle())
             } else {
                 Circle()
-                    .fill(.blue.opacity(0.1))
+                    .fill(.gray.opacity(0.1))
                     .frame(width: 65, height: 65)
                     .overlay(alignment: .center) {
-                        Image(systemName: "plus")
+                        Image(systemName: "photo")
                             .font(.title)
-                            .foregroundColor(.blue.opacity(0.8))
+                            .foregroundColor(.gray.opacity(0.8))
                     }
             }
         }
@@ -85,17 +85,17 @@ struct FlagView: View {
 
     var body: some View {
         Circle()
-            .fill(.purple.opacity(0.1))
+            .fill(.white)
             .frame(width: 65, height: 65)
             .overlay(alignment: .center) {
                 if !countryEmoji.isEmpty {
                     Text(countryEmoji)
-                        .font(.title3)
+                        .font(.largeTitle)
                 } else {
                     Image(systemName: "flag")
-                        .font(.title3)
+                        .font(.largeTitle)
                         .fontWeight(.semibold)
-                        .foregroundColor(.purple.opacity(0.8))
+                        .foregroundColor(.secondary)
                 }
             }
     }
@@ -106,25 +106,63 @@ struct FlagView: View {
 struct CitySearchResults: View {
     @ObservedObject var searchCompleter: SearchCompleter
     @Binding var isShowingPopover: Bool
-    @Binding var city: String
-    let onSelect: (MKLocalSearchCompletion) -> Void
+    @Binding var selectedCity: String
+    @Binding var selectedTimezone: TimeZone?
+    @Binding var countryEmoji: String
 
     var body: some View {
-        Group {
-            if !searchCompleter.results.isEmpty {
-                List(searchCompleter.results) { result in
-                    Text("\(result.title), \(result.subtitle)")
-                        .onTapGesture {
-                            isShowingPopover = false
-                            city = result.title
-                            onSelect(result.completion)
-                        }
+        VStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline) {
+                CompactInput(text: $searchCompleter.queryFragment, placeholder: "Search for a city or timezone")
+                    .frame(maxWidth: 210)
+                    .frame(minWidth: 210)
+                Spacer()
+                Button("dismiss") {
+                    isShowingPopover = false
                 }
-                .frame(height: min(CGFloat(searchCompleter.results.count) * 44, 200))
-            } else {
-                Text("Searching for city...")
-                    .frame(width: 200, height: 32)
+                .buttonStyle(.borderless)
+                .foregroundColor(.blue)
+            }
+            .padding(.top)
+            .padding(.horizontal)
+
+            List(searchCompleter.results) { result in
+                Button(action: {
+                    selectCity(result)
+                }) {
+                    VStack(alignment: .leading) {
+                        Text(result.title)
+                        Text(result.subtitle)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .clipShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
         }
+        .frame(width: 300, height: 400)
+    }
+
+    private func selectCity(_ result: SearchResult) {
+        selectedCity = "\(result.title), \(result.subtitle)"
+
+        if result.title.starts(with: "UTC") {
+            let offsetString = result.title.dropFirst(3)
+            if let offset = Int(offsetString) {
+                selectedTimezone = TimeZone(secondsFromGMT: offset * 3600)
+            }
+        } else {
+            let geocoder = CLGeocoder()
+            geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
+                if let placemark = placemarks?.first, let timezone = placemark.timeZone {
+                    selectedTimezone = timezone
+                    countryEmoji = getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                    print(countryEmoji)
+                }
+            }
+        }
+
+        isShowingPopover = false
     }
 }
