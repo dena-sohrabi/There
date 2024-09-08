@@ -2,7 +2,6 @@ import SwiftUI
 
 extension ContentView {
     struct BottomBarView: View {
-        @EnvironmentObject var locationManager: LocationManager
 
         var body: some View {
             HStack(spacing: 2) {
@@ -17,6 +16,7 @@ extension ContentView {
             .overlay(alignment: .top) {
                 Divider()
             }
+            .background(.ultraThinMaterial)
         }
     }
 
