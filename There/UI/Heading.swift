@@ -5,12 +5,9 @@ struct Heading: View {
 
     var body: some View {
         Text(title)
-            .fontWeight(.semibold)
-            .font(.largeTitle)
-            .padding(.bottom, 18)
+            .font(.headline)
     }
 }
-
 
 #Preview {
     Heading(title: "Hello, World!")
