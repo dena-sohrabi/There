@@ -25,19 +25,19 @@
       "size" : "32x32"
     },
     {
-      "filename" : "icon-128.jpg",
+      "filename" : "icon-2562.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "icon-256 1.jpg",
+      "filename" : "icon-256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "icon-256.jpg",
+      "filename" : "macOS Icon 256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
