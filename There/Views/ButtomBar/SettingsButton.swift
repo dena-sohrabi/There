@@ -3,10 +3,13 @@ import SwiftUI
 struct SettingsButton: View {
     @Environment(\.openSettings) var openSettings
     @State private var settingsHovered: Bool = false
+    @Environment(\.openWindow) var openWindow
 
     var body: some View {
-        Button {
-            openSettings()
+        Menu {
+            Button("Open in new Window") {
+                openWindow(id: "app")
+            }
         } label: {
             Image(systemName: "gearshape.fill")
                 .font(.body)
@@ -24,6 +27,7 @@ struct SettingsButton: View {
         .buttonStyle(.plain)
     }
 }
+
 #Preview {
     SettingsButton()
 }
