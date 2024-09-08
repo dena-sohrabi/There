@@ -22,7 +22,6 @@ struct Entry: Codable, Equatable, Identifiable, FetchableRecord, PersistableReco
     var type: EntryType
     var name: String
     var city: String
-    var country: String
     var timezoneIdentifier: String
     var flag: String?
     var photoData: String?
@@ -31,12 +30,11 @@ struct Entry: Codable, Equatable, Identifiable, FetchableRecord, PersistableReco
         case id, type, name, city, country, timezoneIdentifier, flag, photoData
     }
 
-    init(id: Int64 = Int64.random(in: 1 ... 99999), type: EntryType, name: String, city: String, country: String, timezoneIdentifier: String, flag: String? = nil, photoData: String? = nil) {
+    init(id: Int64 = Int64.random(in: 1 ... 99999), type: EntryType, name: String, city: String, timezoneIdentifier: String, flag: String? = nil, photoData: String? = nil) {
         self.id = id
         self.type = type
         self.name = name
         self.city = city
-        self.country = country
         self.timezoneIdentifier = timezoneIdentifier
         self.flag = flag
         self.photoData = photoData
@@ -45,7 +43,7 @@ struct Entry: Codable, Equatable, Identifiable, FetchableRecord, PersistableReco
     // MARK: - Codable
 
     enum CodingKeys: String, CodingKey {
-        case id, type, name, city, country, timezoneIdentifier, flag, photoData
+        case id, type, name, city, timezoneIdentifier, flag, photoData
     }
 
     var timeDifference: (hours: Int, minutes: Int, dayPeriod: DayPeriod) {

@@ -104,7 +104,6 @@ extension AppDatabase {
                 t.column(Entry.Columns.type.rawValue, .text).notNull()
                 t.column(Entry.Columns.name.rawValue, .text).notNull()
                 t.column(Entry.Columns.city.rawValue, .text).notNull()
-                t.column(Entry.Columns.country.rawValue, .text).notNull()
                 t.column(Entry.Columns.timezoneIdentifier.rawValue, .text).notNull()
                 t.column(Entry.Columns.flag.rawValue, .text)
                 t.column(Entry.Columns.photoData.rawValue, .text)
