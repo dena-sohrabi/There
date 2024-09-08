@@ -2,6 +2,11 @@ import Combine
 import Foundation
 import GRDB
 
+enum SortOrder {
+    case dayPeriodAscending
+    case dayPeriodDescending
+}
+
 class Fetcher: ObservableObject {
     @Published var entries: [Entry] = []
     @Published var getEntries: AnyCancellable?
@@ -18,5 +23,14 @@ class Fetcher: ObservableObject {
                 self?.entries = entries
             }
         )
+    }
+
+    func sortEntries(by order: SortOrder) {
+        switch order {
+        case .dayPeriodAscending:
+            entries.sort { $0.timeDifference.dayPeriod.rawValue < $1.timeDifference.dayPeriod.rawValue }
+        case .dayPeriodDescending:
+            entries.sort { $0.timeDifference.dayPeriod.rawValue > $1.timeDifference.dayPeriod.rawValue }
+        }
     }
 }
