@@ -19,7 +19,10 @@ struct ThereApp: App {
         MenuBarExtra {
             ContentView()
                 .environment(\.database, .shared)
-                .frame(width: 300, height: 400)
+                .frame(width: 350)
+                .frame(width: 350)
+                .frame(minHeight: 200)
+                .frame(maxHeight: 400)
                 .overlay(alignment: .topTrailing) {
                     Button("Open in new Window") {
                         openWindow(id: "app")
@@ -38,19 +41,17 @@ struct ThereApp: App {
         }
         .menuBarExtraStyle(.window)
         .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
-
-        #if MAC_OS_VERSION_15_0
-            .windowManagerRole(.principal)
-        #endif
+        .windowResizability(.contentSize)
 
         Window("There", id: "app") {
             ContentView()
                 .environment(\.database, .shared)
-                .frame(width: 300, height: 400)
+                .frame(width: 350)
+                .frame(minHeight: 200)
+                .frame(maxHeight: 400)
                 .background(TransparentBackgroundView().ignoresSafeArea())
         }
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 300, height: 400)
         .defaultPosition(.topLeading)
         .windowResizability(.contentSize)
 
@@ -72,7 +73,7 @@ struct ThereApp: App {
         Window("Add Timezone", id: "add-timezone") {
             AddTimezone()
                 .environment(\.database, .shared)
-                .frame(width: 400, height: 400)
+                .frame(width: 500, height: 400)
         }
         .windowStyle(.hiddenTitleBar)
         .defaultSize(width: 400, height: 400)
@@ -112,4 +113,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        }
     }
 }
-
