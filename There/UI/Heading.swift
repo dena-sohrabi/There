@@ -6,7 +6,7 @@ struct Heading: View {
     var body: some View {
         Text(title)
             .fontWeight(.semibold)
-            .font(.title)
+            .font(.largeTitle)
             .padding(.bottom, 18)
     }
 }
