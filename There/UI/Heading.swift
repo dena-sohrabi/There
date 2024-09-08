@@ -5,7 +5,7 @@ struct Heading: View {
 
     var body: some View {
         Text(title)
-            .font(.headline)
+            .font(.title)
     }
 }
 
