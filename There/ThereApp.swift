@@ -23,6 +23,7 @@ struct ThereApp: App {
                 .frame(width: 350)
                 .frame(minHeight: 200)
                 .frame(maxHeight: 400)
+                .padding(.top)
                 .overlay(alignment: .topTrailing) {
                     Button("Open in new Window") {
                         openWindow(id: "app")
