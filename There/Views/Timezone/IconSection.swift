@@ -4,13 +4,11 @@ struct IconSection: View {
     @Binding var selectedType: EntryType
     @Binding var image: NSImage?
     @Binding var countryEmoji: String
+    @Binding var showingXAccountInput: Bool
+    @Binding var showingTGAccountInput: Bool
 
-    @State private var showingXAccountInput = false
-    @State private var showingTGAccountInput = false
     @State private var xHovered = false
     @State private var tgHovered = false
-    @State private var username = ""
-    @State private var debounceTask: Task<Void, Never>?
 
     var body: some View {
         VStack {
@@ -47,21 +45,7 @@ struct IconSection: View {
                 }
             }
 
-            if showingXAccountInput {
-                SocialMediaInput(
-                    platform: "X",
-                    username: $username,
-                    image: $image,
-                    debounceTask: $debounceTask
-                )
-            } else if showingTGAccountInput {
-                SocialMediaInput(
-                    platform: "Telegram",
-                    username: $username,
-                    image: $image,
-                    debounceTask: $debounceTask
-                )
-            }
+    
         }
     }
 }
@@ -96,7 +80,7 @@ struct SocialMediaInput: View {
     @Binding var debounceTask: Task<Void, Never>?
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             StyledLabel(title: "Enter a \(platform) username")
                 .padding(.top, 8)
             Input(text: $username, placeholder: "eg. dena_sohrabi")

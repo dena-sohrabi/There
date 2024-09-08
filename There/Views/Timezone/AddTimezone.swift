@@ -14,15 +14,20 @@ struct AddTimezone: View {
     @State var isShowingPopover = false
     @State var countryEmoji = ""
 
+    @State var showingXAccountInput = false
+    @State var showingTGAccountInput = false
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Heading(title: "Add Timezone")
+
 
             HStack(alignment: .top, spacing: 35) {
                 IconSection(
                     selectedType: $selectedType,
                     image: $image,
-                    countryEmoji: $countryEmoji
+                    countryEmoji: $countryEmoji,
+                    showingXAccountInput: $showingXAccountInput,
+                    showingTGAccountInput: $showingTGAccountInput
                 )
 
                 FormSection(
@@ -34,6 +39,8 @@ struct AddTimezone: View {
                     searchCompleter: searchCompleter,
                     countryEmoji: $countryEmoji,
                     image: $image,
+                    showingTGAccountInput: $showingTGAccountInput,
+                    showingXAccountInput: $showingXAccountInput,
                     saveEntry: saveEntry
                 )
             }
@@ -42,6 +49,9 @@ struct AddTimezone: View {
         .padding()
         .onChange(of: countryEmoji) { _, newValue in
             print("countryEmoji changed: \(newValue)")
+        }
+        .overlay(alignment: .top) {
+            Heading(title: "Add Timezone").padding()
         }
     }
 }

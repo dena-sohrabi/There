@@ -9,6 +9,11 @@ struct FormSection: View {
     @StateObject var searchCompleter: SearchCompleter
     @Binding var countryEmoji: String
     @Binding var image: NSImage?
+    @Binding var showingTGAccountInput: Bool
+    @Binding var showingXAccountInput: Bool
+    @State private var username = ""
+    @State private var debounceTask: Task<Void, Never>?
+
     let saveEntry: () -> Void
 
     var body: some View {
@@ -46,6 +51,21 @@ struct FormSection: View {
                         countryEmoji: $countryEmoji
                     )
                 }
+            }
+            if showingXAccountInput {
+                SocialMediaInput(
+                    platform: "X",
+                    username: $username,
+                    image: $image,
+                    debounceTask: $debounceTask
+                )
+            } else if showingTGAccountInput {
+                SocialMediaInput(
+                    platform: "Telegram",
+                    username: $username,
+                    image: $image,
+                    debounceTask: $debounceTask
+                )
             }
 
             PrimaryButton(title: "Add", action: saveEntry)
