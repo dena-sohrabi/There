@@ -5,7 +5,7 @@ struct ContentView: View {
     @AppStorage("email") var email: String = ""
     @StateObject private var locationManager = LocationManager()
     @StateObject private var fetcher = Fetcher()
-    @State private var sortOrder: SortOrder = .dayPeriodAscending
+    @State private var sortOrder: SortOrder = .dayPeriodDescending
     @State private var sortedEntries: [Entry] = []
     @Environment(\.database) var database: AppDatabase
 
