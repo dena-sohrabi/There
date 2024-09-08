@@ -81,10 +81,10 @@ struct SecondaryButton: View {
             action()
         }) {
             Text(title)
+                .padding(.horizontal, 6)
                 .foregroundColor(.primary.opacity(0.8))
                 .fontWeight(.medium)
                 .frame(width: 200, height: 32)
-                .padding(.horizontal, 6)
                 .background(
                     RoundedRectangle(
                         cornerRadius: 8,
