@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct FormSection: View {
+
     @Binding var name: String
     @Binding var city: String
     @Binding var selectedType: EntryType

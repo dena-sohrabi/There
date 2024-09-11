@@ -56,6 +56,9 @@ extension AddTimezone {
         } catch {
             print("Failed to save entry \(error)")
         }
+        presentationMode.wrappedValue.dismiss()
+        appState.menuBarViewIsPresented = true
+        appState.presentMenu()
         resetForm()
     }
 

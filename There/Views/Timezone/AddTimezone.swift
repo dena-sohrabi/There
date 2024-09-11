@@ -5,6 +5,8 @@ import SwiftUI
 struct AddTimezone: View {
     @Environment(\.database) var database
     @StateObject private var searchCompleter = SearchCompleter()
+    @EnvironmentObject var appState: AppState
+    @Environment(\.presentationMode) var presentationMode
 
     @State var image: NSImage?
     @State var name = ""
@@ -19,8 +21,6 @@ struct AddTimezone: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-
-
             HStack(alignment: .top, spacing: 35) {
                 IconSection(
                     selectedType: $selectedType,
@@ -47,7 +47,8 @@ struct AddTimezone: View {
         }
         .frame(maxHeight: .infinity)
         .padding()
-        .onChange(of: countryEmoji) { _, newValue in
+
+        .onChange(of: countryEmoji) { newValue in
             print("countryEmoji changed: \(newValue)")
         }
         .overlay(alignment: .top) {
