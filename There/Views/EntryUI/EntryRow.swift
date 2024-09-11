@@ -8,9 +8,10 @@ struct EntryRow: View {
         HStack {
             EntryIcon(entry: entry)
             VStack(alignment: .leading) {
-                Text(entry.name)
+                Text(entry.name.isEmpty ? entry.city : entry.name)
                     .font(.title3)
                     .fontWeight(.medium)
+                    .lineLimit(1)
                 Text(entry.city)
                     .font(.body)
                     .foregroundColor(.secondary)
