@@ -4,6 +4,7 @@ struct SettingsButton: View {
     @State private var settingsHovered: Bool = false
     @Environment(\.openWindow) var openWindow
     @EnvironmentObject var appState: AppState
+    @Environment(\.database) var database: AppDatabase
 
     var body: some View {
         Menu {
@@ -11,6 +12,18 @@ struct SettingsButton: View {
                 appState.hideMenu()
                 openWindow(id: "app")
             }
+            #if targetEnvironment(simulator) || DEBUG
+                Button("Clear Cache & Data") {
+                    UserDefaults.standard.removeObject(forKey: "hasCompletedInitialSetup")
+                    do {
+                        _ = try database.dbWriter.write { db in
+                            try Entry.deleteAll(db)
+                        }
+                    } catch {
+                        print("Can't clear DB \(error)")
+                    }
+                }
+            #endif
         } label: {
             Image(systemName: "gearshape.fill")
                 .font(.body)
