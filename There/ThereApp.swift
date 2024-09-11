@@ -20,10 +20,10 @@ struct ThereApp: App {
             ContentView()
                 .environment(\.database, .shared)
                 .frame(width: 350)
-                .frame(width: 350)
-                .frame(minHeight: 200)
+                .frame(minHeight: 300)
                 .frame(maxHeight: 400)
                 .padding(.top, 6)
+                .environmentObject(appState)
         } label: {
             let image: NSImage = {
                 let ratio = $0.size.height / $0.size.width
@@ -52,6 +52,7 @@ struct ThereApp: App {
                 .frame(minHeight: 200)
                 .frame(maxHeight: 400)
                 .background(TransparentBackgroundView().ignoresSafeArea())
+                .environmentObject(appState)
         }
         .windowStyle(.hiddenTitleBar)
         .defaultPosition(.topLeading)
@@ -76,11 +77,15 @@ struct ThereApp: App {
             AddTimezone()
                 .environment(\.database, .shared)
                 .frame(width: 500, height: 400)
+                .environmentObject(appState)
         }
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 400, height: 400)
-        .defaultPosition(.center)
-        .windowResizability(.contentSize)
+        #if MAC_OS_VERSION_15_0
+            .windowLevel(.desktop)
+        #endif
+            .defaultSize(width: 400, height: 400)
+            .defaultPosition(.center)
+            .windowResizability(.contentSize)
         #if MAC_OS_VERSION_15_0
             .windowBackgroundDragBehavior(.enabled)
         #endif
@@ -106,16 +111,16 @@ class AppState: ObservableObject {
     func presentMenu() {
         menuBarViewIsPresented = true
     }
+
+    func hideMenu() {
+        menuBarViewIsPresented = true
+    }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    @Environment(\.dismissWindow) var dismissWindow
-
     func applicationDidFinishLaunching(_ notification: Notification) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            AppState.shared.menuBarViewIsPresented = true
-            self.dismissWindow(id: "app")
-            self.dismissWindow(id: "add-timezone")
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+//            AppState.shared.menuBarViewIsPresented = true
+//        }
     }
 }
