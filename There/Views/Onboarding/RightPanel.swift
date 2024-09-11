@@ -5,9 +5,9 @@ import SwiftUI
 struct RightPanel: View {
     @Binding var email: String
     let saveEmail: () -> Void
-    @Environment(\.dismissWindow) var dismissWindow
     @EnvironmentObject var appState: AppState
-
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Please enter your email")
@@ -20,13 +20,14 @@ struct RightPanel: View {
             PrimaryButton(title: "Continue", action: {
                 saveEmail()
                 appState.presentMenu()
-                dismissWindow(id: "init")
+                presentationMode.wrappedValue.dismiss()
+
             })
 
             SecondaryButton(title: "Skip", action: {
                 UserDefaults.standard.setValue(true, forKey: "hasCompletedInitialSetup")
                 appState.presentMenu()
-                dismissWindow(id: "init")
+                presentationMode.wrappedValue.dismiss()
             })
         }
     }
