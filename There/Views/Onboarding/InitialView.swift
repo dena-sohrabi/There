@@ -4,7 +4,6 @@ import SwiftUI
 
 struct InitialView: View {
     @Environment(\.database) var database
-    @Environment(\.dismissWindow) var dismissWindow
     @State private var email: String = ""
     @EnvironmentObject var appState: AppState
 
