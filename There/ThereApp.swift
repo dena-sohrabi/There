@@ -82,6 +82,7 @@ struct ThereApp: App {
         .windowStyle(.hiddenTitleBar)
         #if MAC_OS_VERSION_15_0
             .windowLevel(.desktop)
+            .windowManagerRole(.principal)
         #endif
             .defaultSize(width: 400, height: 400)
             .defaultPosition(.center)
