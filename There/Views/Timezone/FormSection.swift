@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct FormSection: View {
-
     @Binding var name: String
     @Binding var city: String
-    @Binding var selectedType: EntryType
     @Binding var selectedTimeZone: TimeZone?
     @Binding var isShowingPopover: Bool
     @StateObject var searchCompleter: SearchCompleter
@@ -20,10 +18,7 @@ struct FormSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             StyledLabel(title: "Name")
-            Input(text: $name, placeholder: selectedType == .person ? "eg. Dena" : "eg. London Office")
-                .overlay(alignment: .trailingLastTextBaseline) {
-                    TypePicker(selectedType: $selectedType)
-                }
+            Input(text: $name, placeholder: "eg. Dena or London Office")
                 .padding(.bottom, 6)
 
             if !city.isEmpty {
@@ -53,6 +48,7 @@ struct FormSection: View {
                     )
                 }
             }
+
             if showingXAccountInput {
                 SocialMediaInput(
                     platform: "X",

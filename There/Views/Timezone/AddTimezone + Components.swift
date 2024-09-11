@@ -1,37 +1,15 @@
 import MapKit
 import SwiftUI
 
-// MARK: - TypePicker
-
-struct TypePicker: View {
-    @Binding var selectedType: EntryType
-
-    var body: some View {
-        Picker(selection: $selectedType) {
-            Image(systemName: "mappin.and.ellipse")
-                .tag(EntryType.place)
-            Image(systemName: "person.fill")
-                .tag(EntryType.person)
-        } label: {}
-            .fixedSize()
-            .pickerStyle(.menu)
-            .menuStyle(.button)
-            .menuIndicator(.hidden)
-            .help("\(selectedType)")
-            .padding(.trailing, 6)
-    }
-}
-
 // MARK: - IconView
 
 struct IconView: View {
-    let selectedType: EntryType
     @Binding var image: NSImage?
     @Binding var countryEmoji: String
 
     var body: some View {
         Group {
-            if selectedType == .place {
+            if !countryEmoji.isEmpty {
                 FlagView(countryEmoji: countryEmoji)
             } else {
                 ImageView(image: $image)

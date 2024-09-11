@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct IconSection: View {
-    @Binding var selectedType: EntryType
     @Binding var image: NSImage?
     @Binding var countryEmoji: String
     @Binding var showingXAccountInput: Bool
@@ -13,39 +12,36 @@ struct IconSection: View {
     var body: some View {
         VStack {
             IconView(
-                selectedType: selectedType,
                 image: $image,
                 countryEmoji: $countryEmoji
             )
             .padding(.top, 6)
 
-            if selectedType == .person {
-                HStack {
-                    SocialMediaButton(
-                        imageName: "twitter",
-                        isHovered: $xHovered,
-                        action: {
-                            withAnimation(.bouncy(duration: 0.1)) {
-                                showingTGAccountInput = false
-                                showingXAccountInput.toggle()
-                            }
+            HStack {
+                SocialMediaButton(
+                    imageName: "twitter",
+                    isHovered: $xHovered,
+                    action: {
+                        withAnimation(.bouncy(duration: 0.1)) {
+                            showingTGAccountInput = false
+                            showingXAccountInput.toggle()
                         }
-                    )
+                    }
+                )
 
-                    SocialMediaButton(
-                        imageName: "telegram-logo",
-                        isHovered: $tgHovered,
-                        action: {
-                            withAnimation(.bouncy(duration: 0.1)) {
-                                showingXAccountInput = false
-                                showingTGAccountInput.toggle()
-                            }
+                SocialMediaButton(
+                    imageName: "telegram-logo",
+                    isHovered: $tgHovered,
+                    action: {
+                        withAnimation(.bouncy(duration: 0.1)) {
+                            showingXAccountInput = false
+                            showingTGAccountInput.toggle()
                         }
-                    )
-                    if image != nil {
-                        RemoveButton {
-                            image = nil
-                        }
+                    }
+                )
+                if image != nil {
+                    RemoveButton {
+                        image = nil
                     }
                 }
             }

@@ -43,7 +43,7 @@ extension AddTimezone {
             try database.dbWriter.write { db in
                 let entry = Entry(
                     id: Int64.random(in: 1 ... 99999),
-                    type: selectedType,
+                    type: !countryEmoji.isEmpty ? .place : .person,
                     name: name,
                     city: city,
                     timezoneIdentifier: selectedTimeZone?.identifier ?? "",
@@ -68,7 +68,6 @@ extension AddTimezone {
         city = ""
         showingXAccountInput = false
         showingTGAccountInput = false
-        selectedType = .person
         selectedTimeZone = TimeZone.current
         isShowingPopover = false
         countryEmoji = ""
