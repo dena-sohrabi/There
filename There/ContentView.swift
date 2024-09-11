@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var sortOrder: SortOrder = .dayPeriodDescending
     @State private var sortedEntries: [Entry] = []
     @Environment(\.database) var database: AppDatabase
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         VStack(alignment: sortedEntries.isEmpty ? .center : .leading, spacing: 2) {
