@@ -6,35 +6,75 @@ struct EntryIcon: View {
     var body: some View {
         Group {
             if entry.type == .place {
-                Circle()
-                    .fill(Color.white.opacity(0.6))
-                    .frame(width: 45)
-                    .overlay {
-                        Text(entry.flag ?? "✈️")
-                            .font(.largeTitle)
-                    }
-            } else if let url = URL(string: entry.photoData ?? "") {
-                LocalImageView(imageURL: url)
-                    .frame(width: 45, height: 45)
-                    .clipShape(Circle())
+                placeIcon
+            } else if let data = entry.photoData {
+                photoIcon(data: data)
             } else {
-                Circle()
-                    .fill(Color.green)
-                    .frame(width: 45)
+                defaultIcon
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            Image(entry.timeIcon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 14, height: 14)
-                .background(
-                    TransparentBackgroundView()
-                        .frame(width: 18, height: 18)
-                        .cornerRadius(50)
-                )
-                .padding(.bottom, 4)
-                .padding(.trailing, -3)
+            timeIcon
         }
+    }
+
+    private var placeIcon: some View {
+        Circle()
+            .fill(Color.white.opacity(0.6))
+            .frame(width: 45)
+            .overlay {
+                Text(entry.flag ?? "✈️")
+                    .font(.largeTitle)
+            }
+    }
+
+    private func photoIcon(data: String) -> some View {
+        Group {
+            if let url = URL(string: data) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case let .success(image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 45, height: 45)
+                            .clipShape(Circle())
+                    case .failure:
+                        defaultIcon
+                    case .empty:
+                        ProgressView()
+                    @unknown default:
+                        defaultIcon
+                    }
+                }
+            } else {
+                defaultIcon
+            }
+        }
+    }
+
+    private var defaultIcon: some View {
+        Circle()
+            .fill(Color.white.opacity(0.6))
+            .frame(width: 45)
+            .overlay {
+                Image(systemName: "clock")
+                    .foregroundColor(.secondary)
+                    .font(.largeTitle)
+            }
+    }
+
+    private var timeIcon: some View {
+        Image(entry.timeIcon)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 14, height: 14)
+            .background(
+                TransparentBackgroundView()
+                    .frame(width: 18, height: 18)
+                    .cornerRadius(50)
+            )
+            .padding(.bottom, 4)
+            .padding(.trailing, -3)
     }
 }
