@@ -2,7 +2,6 @@ import SwiftUI
 
 extension ContentView {
     struct BottomBarView: View {
-
         var body: some View {
             HStack(spacing: 2) {
                 AddButton()
