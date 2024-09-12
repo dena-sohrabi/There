@@ -1,12 +1,11 @@
 import SwiftUI
 
-extension ContentView {
+extension MainView {
     struct BottomBarView: View {
         var body: some View {
             HStack(spacing: 2) {
                 AddButton()
                 Spacer()
-
                 SettingsButton()
             }
             .padding(.horizontal, 6)
