@@ -38,7 +38,7 @@ struct FormSection: View {
                 SecondaryButton(title: "Add Location") {
                     isShowingPopover = true
                 }
-                .sheet(isPresented: $isShowingPopover) {
+                .popover(isPresented: $isShowingPopover) {
                     CitySearchResults(
                         searchCompleter: searchCompleter,
                         isShowingPopover: $isShowingPopover,

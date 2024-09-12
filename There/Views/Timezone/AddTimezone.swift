@@ -5,8 +5,8 @@ import SwiftUI
 struct AddTimezone: View {
     @Environment(\.database) var database
     @StateObject private var searchCompleter = SearchCompleter()
-    @EnvironmentObject var appState: AppState
-    @Environment(\.presentationMode) var presentationMode
+
+    @EnvironmentObject var router: Router
 
     @State var image: NSImage?
     @State var name = ""
@@ -49,6 +49,13 @@ struct AddTimezone: View {
         }
         .overlay(alignment: .top) {
             Heading(title: "Add Timezone").padding()
+        }
+        .overlay(alignment: .topLeading) {
+            Button {
+                router.cleanActiveRoute()
+            } label: {
+                Image(systemName: "xmark")
+            }
         }
     }
 }

@@ -43,11 +43,11 @@ extension AddTimezone {
             try database.dbWriter.write { db in
                 let entry = Entry(
                     id: Int64.random(in: 1 ... 99999),
-                    type: !countryEmoji.isEmpty ? .place : .person,
+                    type: !countryEmoji.isEmpty && image == nil ? .place : .person,
                     name: name,
                     city: city,
                     timezoneIdentifier: selectedTimeZone?.identifier ?? "",
-                    flag: countryEmoji,
+                    flag: image == nil ? countryEmoji : "",
                     photoData: fileURL.absoluteString
                 )
                 print("entry \(entry)")
@@ -56,9 +56,8 @@ extension AddTimezone {
         } catch {
             print("Failed to save entry \(error)")
         }
-        presentationMode.wrappedValue.dismiss()
-        appState.menuBarViewIsPresented = true
-        appState.presentMenu()
+
+        router.cleanActiveRoute()
         resetForm()
     }
 

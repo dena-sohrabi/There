@@ -9,7 +9,9 @@ struct IconView: View {
 
     var body: some View {
         Group {
-            if !countryEmoji.isEmpty {
+            if image != nil {
+                ImageView(image: $image)
+            } else if !countryEmoji.isEmpty {
                 FlagView(countryEmoji: countryEmoji)
             } else {
                 ImageView(image: $image)
