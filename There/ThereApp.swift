@@ -14,16 +14,17 @@ struct ThereApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.openWindow) var openWindow
     @ObservedObject var appState = AppState.shared
-
+    @StateObject var router: Router = Router()
     var body: some Scene {
         MenuBarExtra {
             ContentView()
                 .environment(\.database, .shared)
-                .frame(width: 350)
-                .frame(minHeight: 300)
+                .frame(width: 360)
+                .frame(minHeight: 350)
                 .frame(maxHeight: 400)
                 .padding(.top, 6)
                 .environmentObject(appState)
+                .environmentObject(router)
         } label: {
             let image: NSImage = {
                 let ratio = $0.size.height / $0.size.width
