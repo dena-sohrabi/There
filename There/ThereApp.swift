@@ -30,7 +30,7 @@ struct ThereApp: App {
                 $0.size.height = 18
                 $0.size.width = 18 / ratio
                 return $0
-            }(NSImage(named: "Logo")!)
+            }(NSImage(named: "appIcon")!)
 
             Image(nsImage: image)
                 .onAppear {
