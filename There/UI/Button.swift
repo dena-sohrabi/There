@@ -52,19 +52,36 @@ struct SecondaryButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
+                .foregroundColor(.primary)
         }
         .buttonStyle(SecondaryButtonStyle())
     }
 }
 
 struct SecondaryButtonStyle: ButtonStyle {
-    let white = Color(red: 1.0, green: 1.0, blue: 1.0) // #FFFFFF
-    let lightGray = Color(red: 0.86, green: 0.86, blue: 0.86) // #DCDCDC
+    @Environment(\.colorScheme) var scheme
+
+    var white: Color {
+        if scheme == .dark {
+            return Color(.gray).opacity(0.2)
+        } else {
+            return Color(red: 1.0, green: 1.0, blue: 1.0)
+        }
+    }
+
+    var lightGray: Color {
+        if scheme == .dark {
+            return Color(NSColor.systemGray).opacity(0.2)
+        } else {
+            return Color(red: 0.86, green: 0.86, blue: 0.86) // #DCDCDC
+        }
+    }
 
     @State private var hovered: Bool = false
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
+            .lineLimit(1)
             .padding(.horizontal, 6)
             .foregroundColor(.primary.opacity(0.8))
             .fontWeight(.medium)
@@ -103,7 +120,15 @@ struct CompactButton: View {
 }
 
 struct CompactButtonStyle: ButtonStyle {
-    let lightGray = Color(red: 0.86, green: 0.86, blue: 0.86) // #DCDCDC
+    @Environment(\.colorScheme) var scheme
+
+    var lightGray: Color {
+        if scheme == .dark {
+            return Color(NSColor.systemGray).opacity(0.2)
+        } else {
+            return Color(red: 0.86, green: 0.86, blue: 0.86) // #DCDCDC
+        }
+    }
 
     @State private var hovered: Bool = false
 
@@ -113,7 +138,7 @@ struct CompactButtonStyle: ButtonStyle {
             .foregroundColor(.primary)
             .fontWeight(.medium)
             .frame(height: 28)
-            .background(hovered ? .white : .white.opacity(0.8))
+            .background(hovered ? (scheme == .dark ? Color(.gray).opacity(0.2) : .white) : (scheme == .dark ? Color(.gray).opacity(0.3) : .white.opacity(0.8)))
             .cornerRadius(8)
             .shadow(color: .primary.opacity(0.04), radius: 1, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
