@@ -2,6 +2,15 @@ import SwiftUI
 
 struct EntryIcon: View {
     let entry: Entry
+    @Environment(\.colorScheme) var scheme
+
+    var backgroundColor: Color {
+        if scheme == .dark {
+            return Color(NSColor.darkGray)
+        } else {
+            return Color.white.opacity(0.6)
+        }
+    }
 
     var body: some View {
         Group {
@@ -20,7 +29,7 @@ struct EntryIcon: View {
 
     private var placeIcon: some View {
         Circle()
-            .fill(Color.white.opacity(0.6))
+            .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
                 Text(entry.flag ?? "✈️")
@@ -55,7 +64,7 @@ struct EntryIcon: View {
 
     private var defaultIcon: some View {
         Circle()
-            .fill(Color.white.opacity(0.6))
+            .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
                 Image(systemName: "clock")
@@ -71,6 +80,7 @@ struct EntryIcon: View {
             .frame(width: 14, height: 14)
             .background(
                 TransparentBackgroundView()
+                    
                     .frame(width: 18, height: 18)
                     .cornerRadius(50)
             )
