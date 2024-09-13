@@ -10,6 +10,7 @@ struct FormSection: View {
     @Binding var image: NSImage?
     @Binding var showingTGAccountInput: Bool
     @Binding var showingXAccountInput: Bool
+    @State var showError: Bool = false
     @State private var username = ""
     @State private var debounceTask: Task<Void, Never>?
 
@@ -23,19 +24,9 @@ struct FormSection: View {
 
             if !city.isEmpty {
                 SecondaryButton(title: city) {
-                    isShowingPopover = true
-                }
-                .sheet(isPresented: $isShowingPopover) {
-                    CitySearchResults(
-                        searchCompleter: searchCompleter,
-                        isShowingPopover: $isShowingPopover,
-                        selectedCity: $city,
-                        selectedTimezone: $selectedTimeZone,
-                        countryEmoji: $countryEmoji
-                    )
-                }
-            } else {
-                SecondaryButton(title: "Add Location") {
+                    withAnimation(.easeOut(duration: 0.1)) {
+                        showError = false
+                    }
                     isShowingPopover = true
                 }
                 .popover(isPresented: $isShowingPopover) {
@@ -47,6 +38,30 @@ struct FormSection: View {
                         countryEmoji: $countryEmoji
                     )
                 }
+            } else {
+                SecondaryButton(title: "Add Location") {
+                    withAnimation(.easeOut(duration: 0.1)) {
+                        showError = false
+                    }
+                    isShowingPopover = true
+                }
+                .popover(isPresented: $isShowingPopover) {
+                    CitySearchResults(
+                        searchCompleter: searchCompleter,
+                        isShowingPopover: $isShowingPopover,
+                        selectedCity: $city,
+                        selectedTimezone: $selectedTimeZone,
+                        countryEmoji: $countryEmoji
+                    )
+                }
+            }
+
+            if showError {
+                Text("Please select a Location")
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .fontWeight(.medium)
+                    .transition(.opacity)
             }
 
             if showingXAccountInput {
@@ -65,8 +80,16 @@ struct FormSection: View {
                 )
             }
 
-            PrimaryButton(title: "Add", action: saveEntry)
-                .padding(.top, 8)
+            PrimaryButton(title: "Add", action: {
+                if selectedTimeZone != nil {
+                    saveEntry()
+                } else {
+                    withAnimation(.easeIn(duration: 0.1)) {
+                        showError = true
+                    }
+                }
+            })
+            .padding(.top, 8)
         }
     }
 }
