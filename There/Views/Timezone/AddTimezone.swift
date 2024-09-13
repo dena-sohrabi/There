@@ -48,19 +48,22 @@ struct AddTimezone: View {
             print("countryEmoji changed: \(newValue)")
         }
         .overlay(alignment: .top) {
-            Heading(title: "Add Timezone").padding()
+            Heading(title: "Add Timezone")
+                .padding(.top, 10)
         }
         .overlay(alignment: .topLeading) {
             Button {
                 router.cleanActiveRoute()
             } label: {
-                Image(systemName: "xmark")
+                Image(systemName: "chevron.left")
             }
+
+            .padding(.top, 14)
         }
     }
 }
 
 #Preview {
     AddTimezone()
-        .frame(width: 500, height: 400)
+        .frame(width: 380, height: 400)
 }
