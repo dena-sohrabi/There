@@ -3,6 +3,10 @@ import SwiftUI
 struct EntryRow: View {
     let entry: Entry
     @State private var isHovered: Bool = false
+    @Environment(\.colorScheme) var scheme
+
+    @State private var currentDate = Date()
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         HStack {
@@ -23,21 +27,24 @@ struct EntryRow: View {
                 Text(formattedTime(timeZoneIdentifier: entry.timezoneIdentifier))
                     .monospaced()
                     .font(.body)
-                Text(formatTimeDifference(hours: entry.timeDifference.hours, minutes: entry.timeDifference.minutes))
+                Text(formatTimeDifference())
                     .monospaced()
                     .font(.body)
-                    .foregroundColor(timeDifferenceColor(hours: entry.timeDifference.hours, minutes: entry.timeDifference.minutes))
+                    .foregroundColor(timeDifferenceColor())
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .background(isHovered ? Color.white.opacity(0.6) : Color.clear)
+        .background(isHovered ? scheme == .dark ? Color.white.opacity(0.1) : Color.white.opacity(0.6) : Color.clear)
         .cornerRadius(8)
         .onHover { isHovered in
             withAnimation(.easeInOut(duration: 0.1)) {
                 self.isHovered = isHovered
             }
+        }
+        .onReceive(timer) { _ in
+            currentDate = Date()
         }
     }
 
@@ -45,20 +52,42 @@ struct EntryRow: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
-        return formatter.string(from: Date())
+        return formatter.string(from: currentDate)
     }
 
-    private func formatTimeDifference(hours: Int, minutes: Int) -> String {
+    private func formatTimeDifference() -> String {
+        let userTimeZone = TimeZone.current
+        let entryTimeZone = TimeZone(identifier: entry.timezoneIdentifier) ?? .current
+
+        let userDate = currentDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
+        let entryDate = currentDate.addingTimeInterval(TimeInterval(entryTimeZone.secondsFromGMT()))
+
+        let difference = Calendar.current.dateComponents([.hour, .minute], from: userDate, to: entryDate)
+
+        let hours = difference.hour ?? 0
+        let minutes = difference.minute ?? 0
+
         if hours == 0 && minutes == 0 {
             return "Same time"
         }
 
         let totalHours = Double(hours) + Double(minutes) / 60.0
-        let sign = totalHours < 0 ? "-" : "+"
-        return String(format: "%@%.1f hrs", sign, abs(totalHours))
+
+        return String(format: "%+.1f hrs", totalHours)
     }
 
-    private func timeDifferenceColor(hours: Int, minutes: Int) -> Color {
+    private func timeDifferenceColor() -> Color {
+        let userTimeZone = TimeZone.current
+        let entryTimeZone = TimeZone(identifier: entry.timezoneIdentifier) ?? .current
+
+        let userDate = currentDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
+        let entryDate = currentDate.addingTimeInterval(TimeInterval(entryTimeZone.secondsFromGMT()))
+
+        let difference = Calendar.current.dateComponents([.hour, .minute], from: userDate, to: entryDate)
+
+        let hours = difference.hour ?? 0
+        let minutes = difference.minute ?? 0
+
         if hours < 0 || (hours == 0 && minutes < 0) {
             return .red
         } else if hours == 0 && minutes == 0 {

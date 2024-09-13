@@ -9,6 +9,8 @@ struct MainView: View {
     @State private var sortedEntries: [Entry] = []
     @Environment(\.database) var database: AppDatabase
     @EnvironmentObject var appState: AppState
+    @State private var currentDate = Date()
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack(alignment: sortedEntries.isEmpty ? .center : .leading, spacing: 2) {
@@ -23,6 +25,7 @@ struct MainView: View {
                                     Button("Delete", role: .destructive) {
                                         deleteEntry(entry)
                                     }
+                                   
                                 }
                         }
                         .animation(.easeInOut(duration: 0.1), value: sortedEntries.count)
@@ -45,6 +48,9 @@ struct MainView: View {
         }
         .onChange(of: fetcher.entries) { _ in
             sortEntries()
+        }
+        .onReceive(timer) { _ in
+            currentDate = Date()
         }
         .environmentObject(locationManager)
     }
