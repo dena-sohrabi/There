@@ -20,9 +20,10 @@ struct ThereApp: App {
             ContentView()
                 .environment(\.database, .shared)
                 .frame(width: 360)
-                .frame(minHeight: 350)
-                .frame(maxHeight: 400)
+                .frame(minHeight: 380)
+                .frame(maxHeight: 500)
                 .padding(.top, 6)
+                .background(Color(NSColor.windowBackgroundColor).opacity(0.78).ignoresSafeArea())
                 .environmentObject(appState)
                 .environmentObject(router)
         } label: {
@@ -41,6 +42,7 @@ struct ThereApp: App {
                         appState.presentMenu()
                     }
                 }
+                .foregroundColor(.primary)
         }
         .menuBarExtraStyle(.window)
         .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
@@ -54,11 +56,15 @@ struct ThereApp: App {
                 .frame(maxHeight: 400)
                 .background(TransparentBackgroundView().ignoresSafeArea())
                 .environmentObject(appState)
+                .environmentObject(router)
         }
         .windowStyle(.hiddenTitleBar)
         .defaultPosition(.topLeading)
         .windowResizability(.contentSize)
-
+        #if MAC_OS_VERSION_15_0
+            .windowManagerRole(.principal)
+            .windowLevel(.desktop)
+        #endif
         Window("init", id: "init") {
             InitialView()
                 .environment(\.database, .shared)
