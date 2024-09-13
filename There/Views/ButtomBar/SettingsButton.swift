@@ -2,15 +2,24 @@ import SwiftUI
 
 struct SettingsButton: View {
     @State private var settingsHovered: Bool = false
-    @Environment(\.openWindow) var openWindow
+//    @Environment(\.openWindow) var openWindow
     @EnvironmentObject var appState: AppState
     @Environment(\.database) var database: AppDatabase
+    @Environment(\.colorScheme) var scheme
+
+    var backgroundColor: Color {
+        if scheme == .dark {
+            return Color(.gray).opacity(0.2)
+        } else {
+            return .white
+        }
+    }
 
     var body: some View {
         Menu {
             Button("Open in new Window") {
                 appState.hideMenu()
-                openWindow(id: "app")
+//                openWindow(id: "app")
             }
             #if targetEnvironment(simulator) || DEBUG
                 Button("Clear Cache & Data") {
@@ -36,7 +45,7 @@ struct SettingsButton: View {
         }
         .frame(height: 28)
         .padding(.horizontal, 8)
-        .background(settingsHovered ? .white : .clear)
+        .background(settingsHovered ? backgroundColor : .clear)
         .cornerRadius(8)
         .buttonStyle(.plain)
     }
