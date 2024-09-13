@@ -39,10 +39,10 @@ struct IconSection: View {
                         }
                     }
                 )
-                if image != nil {
-                    RemoveButton {
-                        image = nil
-                    }
+            }
+            if image != nil {
+                RemoveButton {
+                    image = nil
                 }
             }
         }
@@ -78,11 +78,12 @@ struct RemoveButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "x.circle")
-                .resizable()
-                .frame(width: 18, height: 18)
-                .clipShape(Circle())
+            Text("Clear")
                 .foregroundColor(.secondary)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 4)
+                .background(.blue.opacity(0.08))
+                .cornerRadius(6)
         }
         .buttonStyle(PlainButtonStyle())
         .scaleEffect(isHovered ? 1.1 : 1)
