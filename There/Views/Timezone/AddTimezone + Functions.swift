@@ -18,7 +18,7 @@ extension AddTimezone {
                         if let timeZone = placemark.timeZone {
                             self.selectedTimeZone = timeZone
                         }
-                        self.countryEmoji = getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                        self.countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
                     }
                 }
             }

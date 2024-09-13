@@ -45,6 +45,11 @@ struct IconSection: View {
                     image = nil
                 }
             }
+            if !countryEmoji.isEmpty {
+                UploadButton {
+                    image = Utils.shared.selectPhoto()
+                }
+            }
         }
     }
 }
@@ -85,6 +90,32 @@ struct RemoveButton: View {
                 .background(.blue.opacity(0.08))
                 .cornerRadius(6)
         }
+        .buttonStyle(PlainButtonStyle())
+        .scaleEffect(isHovered ? 1.1 : 1)
+        .shadow(color: isHovered ? .black.opacity(0.2) : .clear, radius: 4, x: 0, y: 4)
+        .onHover { hovering in
+            withAnimation {
+                isHovered = hovering
+            }
+        }
+    }
+}
+
+struct UploadButton: View {
+    @State var isHovered: Bool = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text("Add From Finder")
+                .foregroundColor(.secondary)
+                .font(.caption)
+              
+        }
+        .padding(.horizontal, 2)
+        .padding(.vertical, 2)
+        .background(.blue.opacity(0.08))
+        .cornerRadius(6)
         .buttonStyle(PlainButtonStyle())
         .scaleEffect(isHovered ? 1.1 : 1)
         .shadow(color: isHovered ? .black.opacity(0.2) : .clear, radius: 4, x: 0, y: 4)

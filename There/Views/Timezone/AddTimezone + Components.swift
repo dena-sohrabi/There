@@ -38,22 +38,14 @@ struct ImageView: View {
                     .fill(.gray.opacity(0.1))
                     .frame(width: 65, height: 65)
                     .overlay(alignment: .center) {
-                        Image(systemName: "photo")
+                        Image(systemName: "photo.badge.plus")
                             .font(.title)
                             .foregroundColor(.gray.opacity(0.8))
                     }
             }
         }
-        .onTapGesture(perform: selectPhoto)
-    }
-
-    private func selectPhoto() {
-        let openPanel = NSOpenPanel()
-        openPanel.allowedContentTypes = [.image]
-        openPanel.allowsMultipleSelection = false
-
-        if openPanel.runModal() == .OK, let url = openPanel.url {
-            image = NSImage(contentsOf: url)
+        .onTapGesture {
+            image = Utils.shared.selectPhoto()
         }
     }
 }
@@ -137,7 +129,7 @@ struct CitySearchResults: View {
             geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
                 if let placemark = placemarks?.first, let timezone = placemark.timeZone {
                     selectedTimezone = timezone
-                    countryEmoji = getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                    countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
                     print(countryEmoji)
                 }
             }
