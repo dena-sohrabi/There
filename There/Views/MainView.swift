@@ -3,7 +3,6 @@ import SwiftUI
 
 struct MainView: View {
     @AppStorage("email") var email: String = ""
-    @StateObject private var locationManager = LocationManager()
     @StateObject private var fetcher = Fetcher()
     @State private var sortOrder: SortOrder = .dayPeriodDescending
     @State private var sortedEntries: [Entry] = []
@@ -25,7 +24,6 @@ struct MainView: View {
                                     Button("Delete", role: .destructive) {
                                         deleteEntry(entry)
                                     }
-                                   
                                 }
                         }
                         .animation(.easeInOut(duration: 0.1), value: sortedEntries.count)
@@ -40,7 +38,6 @@ struct MainView: View {
             BottomBarView()
         }
         .onAppear {
-            locationManager.checkLocationAuthorization()
             sortEntries()
         }
         .onChange(of: sortOrder) { _ in
@@ -52,7 +49,6 @@ struct MainView: View {
         .onReceive(timer) { _ in
             currentDate = Date()
         }
-        .environmentObject(locationManager)
     }
 
     private func sortEntries() {
