@@ -45,7 +45,7 @@ struct ThereApp: App {
                 .foregroundColor(.primary)
         }
         .menuBarExtraStyle(.window)
-        .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
+//        .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
         .windowResizability(.contentSize)
 
         Window("There", id: "app") {
