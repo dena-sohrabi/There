@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 struct FormSection: View {
     @Binding var name: String
@@ -13,7 +14,7 @@ struct FormSection: View {
     @State var showError: Bool = false
     @State private var username = ""
     @State private var debounceTask: Task<Void, Never>?
-
+    var isEditing: Bool = false
     let saveEntry: () -> Void
 
     var body: some View {
@@ -64,23 +65,7 @@ struct FormSection: View {
                     .transition(.opacity)
             }
 
-//            if showingXAccountInput {
-//                SocialMediaInput(
-//                    platform: "X",
-//                    username: $username,
-//                    image: $image,
-//                    debounceTask: $debounceTask
-//                )
-//            } else if showingTGAccountInput {
-//                SocialMediaInput(
-//                    platform: "Telegram",
-//                    username: $username,
-//                    image: $image,
-//                    debounceTask: $debounceTask
-//                )
-//            }
-
-            PrimaryButton(title: "Add", action: {
+            PrimaryButton(title: isEditing ? "Update" : "Add", action: {
                 if selectedTimeZone != nil {
                     saveEntry()
                 } else {
@@ -93,5 +78,3 @@ struct FormSection: View {
         }
     }
 }
-
-
