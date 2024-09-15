@@ -95,6 +95,12 @@ struct IconView: View {
             Button("Finder") {
                 image = Utils.shared.selectPhoto()
             }.buttonStyle(.link)
+                let selectedImage = Utils.shared.selectPhoto()
+                DispatchQueue.main.async {
+                    self.image = selectedImage
+                }
+
+            }.buttonStyle(.link).padding(.horizontal, 2)
         }
     }
 
