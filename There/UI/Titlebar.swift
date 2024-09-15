@@ -18,6 +18,12 @@ struct Titlebar: View {
                     Text("Add Time Zone")
                         .font(.body)
                         .fontWeight(.medium)
+                case .editTimeZone:
+                    Text("✍️")
+                        .font(.callout)
+                    Text("Edit Time Zone")
+                        .font(.body)
+                        .fontWeight(.medium)
                 case .mainView:
                     EmptyView()
                 }

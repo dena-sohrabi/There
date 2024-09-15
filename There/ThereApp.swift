@@ -8,6 +8,7 @@
 import AppKit
 import MenuBarExtraAccess
 import SwiftUI
+import UserNotifications
 
 @main
 struct ThereApp: App {
@@ -37,15 +38,14 @@ struct ThereApp: App {
                 .onAppear {
                     if UserDefaults.standard.bool(forKey: "hasCompletedInitialSetup") == false {
                         openWindow(id: "init")
-                    } else {
-                        appState.presentMenu()
                     }
                 }
                 .foregroundColor(.primary)
         }
         .menuBarExtraStyle(.window)
+        .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
         .windowResizability(.contentSize)
-        
+
         Window("There", id: "app") {
             ContentView()
                 .environment(\.database, .shared)
@@ -78,20 +78,6 @@ struct ThereApp: App {
             .windowBackgroundDragBehavior(.enabled)
         #endif
 
-        WindowGroup("Edit timeZone", for: Entry.ID.self) { $entryId in
-            EditTimeZoneView(entryId: entryId)
-                .frame(width: 600, height: 300)
-                .environment(\.database, .shared)
-        }
-        .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 600, height: 300)
-        .defaultPosition(.center)
-        .windowResizability(.contentSize)
-        #if MAC_OS_VERSION_15_0
-            .windowLevel(.desktop)
-            .windowBackgroundDragBehavior(.enabled)
-        #endif
-
         Settings {
             Text("Coming soon...")
         }
@@ -120,9 +106,4 @@ class AppState: ObservableObject {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-//            AppState.shared.menuBarViewIsPresented = true
-//        }
-    }
 }

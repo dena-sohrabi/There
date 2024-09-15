@@ -9,6 +9,9 @@ struct ContentView: View {
         case .addTimezone:
             AddTimezone()
                 .transition(.asymmetric(insertion: .push(from: .trailing), removal: .push(from: .leading)))
+        case let .editTimeZone(entryId):
+            EditTimeZoneView(entryId: entryId)
+                .transition(.asymmetric(insertion: .push(from: .trailing), removal: .push(from: .leading)))
         }
     }
 }

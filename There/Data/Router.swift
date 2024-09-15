@@ -3,6 +3,7 @@ import SwiftUI
 enum Route {
     case addTimezone
     case mainView
+    case editTimeZone(entryId: Int64?)
 }
 
 class Router: ObservableObject {
