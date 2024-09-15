@@ -32,13 +32,13 @@ struct SettingsButton: View {
                 Button("DM on X") {
                     openURL(URL(string: "https://twitter.com/messages/compose?recipient_id=1434101346110689282")!)
                 }
-                Button("Email us") {
+                Button("Email Us") {
                     openAppleMailComposer(to: "support@there.pm",
                                           subject: "Support Request",
                                           body: "Hello, I need assistance with...")
                 }
             }
-            Section("Social") {
+            Section {
                 Button("Open Website") {
                     openURL(URL(string: "https://there.pm")!)
                 }
@@ -63,10 +63,7 @@ struct SettingsButton: View {
             #endif
 
             Divider()
-            Button("Open in new Window") {
-                appState.hideMenu()
-                openWindow(id: "app")
-            }
+
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
