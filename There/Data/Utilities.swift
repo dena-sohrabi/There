@@ -5,9 +5,9 @@ class Utils {
     public static var shared = Utils()
     func selectPhoto() -> NSImage? {
         let openPanel = NSOpenPanel()
-        openPanel.allowedContentTypes = [.image]
+        openPanel.allowedContentTypes = [.jpeg, .png]
         openPanel.allowsMultipleSelection = false
-
+        openPanel.prompt = "Select Image"
         if openPanel.runModal() == .OK, let url = openPanel.url {
             return NSImage(contentsOf: url)
         } else {
