@@ -43,55 +43,6 @@ struct SocialMediaButton: View {
     }
 }
 
-struct RemoveButton: View {
-    @State var isHovered: Bool = false
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text("Clear")
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 4)
-                .padding(.vertical, 4)
-                .background(.blue.opacity(0.08))
-                .cornerRadius(6)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .scaleEffect(isHovered ? 1.1 : 1)
-        .shadow(color: isHovered ? .black.opacity(0.2) : .clear, radius: 4, x: 0, y: 4)
-        .onHover { hovering in
-            withAnimation {
-                isHovered = hovering
-            }
-        }
-    }
-}
-
-struct UploadButton: View {
-    @State var isHovered: Bool = false
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text("Add From Finder")
-                .foregroundColor(.secondary)
-                .font(.caption)
-        }
-        .padding(.horizontal, 2)
-        .padding(.vertical, 2)
-        .background(.blue.opacity(0.08))
-        .cornerRadius(6)
-        .buttonStyle(PlainButtonStyle())
-        .scaleEffect(isHovered ? 1.1 : 1)
-        .shadow(color: isHovered ? .black.opacity(0.2) : .clear, radius: 4, x: 0, y: 4)
-        .onHover { hovering in
-            withAnimation {
-                isHovered = hovering
-            }
-        }
-    }
-}
-
 struct SocialMediaInput: View {
     let platform: String
     @Binding var username: String
@@ -140,8 +91,6 @@ struct SocialMediaInput: View {
             throw URLError(.badServerResponse)
         }
 
-        print("HTTP Status Code: \(httpResponse.statusCode)")
-        print("Received data size: \(data.count) bytes")
         image = NSImage(data: data)
         return data
     }
