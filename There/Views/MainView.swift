@@ -9,6 +9,10 @@ struct MainView: View {
     @Environment(\.database) var database: AppDatabase
     @EnvironmentObject var appState: AppState
     @State private var currentDate = Date()
+    @State private var isAtBottom: Bool = false
+    @State private var editingEntry: Entry? = nil
+    @Environment(\.openWindow) var openWindow
+
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -21,22 +25,35 @@ struct MainView: View {
                         ForEach(sortedEntries) { entry in
                             EntryRow(entry: entry)
                                 .contextMenu {
+                                    Button("Edit") {
+                                        editingEntry = entry
+                                        openWindow(value: entry.id)
+                                    }
                                     Button("Delete", role: .destructive) {
                                         deleteEntry(entry)
                                     }
                                 }
+
+                                .id(entry.id)
                         }
                         .animation(.easeInOut(duration: 0.1), value: sortedEntries.count)
+                        Color.clear
+                            .frame(height: 2)
+                            .onAppear {
+                                isAtBottom = false
+                            }
+                            .onDisappear {
+                                isAtBottom = true
+                            }
                     }
                     .padding(.horizontal, 6)
                 }
                 .scrollIndicators(.hidden)
+                BottomBarView(isAtBottom: $isAtBottom)
             }
         }
         .frame(maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom) {
-            BottomBarView()
-        }
+        .padding(.vertical, 6)
         .onAppear {
             sortEntries()
         }
@@ -76,5 +93,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
-        .frame(width: 300, height: 400)
+        .frame(width: 400, height: 400)
 }
