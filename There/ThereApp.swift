@@ -19,10 +19,9 @@ struct ThereApp: App {
         MenuBarExtra {
             ContentView()
                 .environment(\.database, .shared)
-                .frame(width: 360)
-                .frame(minHeight: 380)
+                .frame(width: 320)
+                .frame(minHeight: 320)
                 .frame(maxHeight: 500)
-                .padding(.top, 6)
                 .background(Color(NSColor.windowBackgroundColor).opacity(0.78).ignoresSafeArea())
                 .environmentObject(appState)
                 .environmentObject(router)
@@ -45,9 +44,8 @@ struct ThereApp: App {
                 .foregroundColor(.primary)
         }
         .menuBarExtraStyle(.window)
-//        .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
         .windowResizability(.contentSize)
-
+        
         Window("There", id: "app") {
             ContentView()
                 .environment(\.database, .shared)
@@ -65,7 +63,7 @@ struct ThereApp: App {
             .windowManagerRole(.principal)
             .windowLevel(.desktop)
         #endif
-        Window("init", id: "init") {
+        WindowGroup("init", id: "init") {
             InitialView()
                 .environment(\.database, .shared)
                 .fixedSize()
@@ -80,21 +78,17 @@ struct ThereApp: App {
             .windowBackgroundDragBehavior(.enabled)
         #endif
 
-        Window("Add Timezone", id: "add-timezone") {
-            AddTimezone()
+        WindowGroup("Edit timeZone", for: Entry.ID.self) { $entryId in
+            EditTimeZoneView(entryId: entryId)
+                .frame(width: 600, height: 300)
                 .environment(\.database, .shared)
-                .frame(width: 500, height: 400)
-                .environmentObject(appState)
         }
         .windowStyle(.hiddenTitleBar)
+        .defaultSize(width: 600, height: 300)
+        .defaultPosition(.center)
+        .windowResizability(.contentSize)
         #if MAC_OS_VERSION_15_0
             .windowLevel(.desktop)
-            .windowManagerRole(.principal)
-        #endif
-            .defaultSize(width: 400, height: 400)
-            .defaultPosition(.center)
-            .windowResizability(.contentSize)
-        #if MAC_OS_VERSION_15_0
             .windowBackgroundDragBehavior(.enabled)
         #endif
 
