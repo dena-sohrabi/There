@@ -8,17 +8,18 @@ struct MainView: View {
     @State private var sortedEntries: [Entry] = []
     @Environment(\.database) var database: AppDatabase
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var router: Router
     @State private var currentDate = Date()
     @State private var isAtBottom: Bool = false
-    @State private var editingEntry: Entry? = nil
-    @Environment(\.openWindow) var openWindow
 
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack(alignment: sortedEntries.isEmpty ? .center : .leading, spacing: 2) {
             if sortedEntries.isEmpty {
+                Spacer()
                 EmptyTimezoneView()
+                Spacer()
             } else {
                 ScrollView(.vertical) {
                     LazyVStack(spacing: 0) {
@@ -26,8 +27,7 @@ struct MainView: View {
                             EntryRow(entry: entry)
                                 .contextMenu {
                                     Button("Edit") {
-                                        editingEntry = entry
-                                        openWindow(value: entry.id)
+                                        router.setActiveRoute(to: .editTimeZone(entryId: entry.id))
                                     }
                                     Button("Delete", role: .destructive) {
                                         deleteEntry(entry)
@@ -49,11 +49,11 @@ struct MainView: View {
                     .padding(.horizontal, 6)
                 }
                 .scrollIndicators(.hidden)
-                BottomBarView(isAtBottom: $isAtBottom)
             }
+            BottomBarView(isAtBottom: $isAtBottom)
         }
         .frame(maxHeight: .infinity)
-        .padding(.vertical, 6)
+        .padding(.top, 6)
         .onAppear {
             sortEntries()
         }
@@ -85,7 +85,7 @@ struct MainView: View {
                     try fetchedEntry?.delete(db)
                 }
             } catch {
-                print("Can't delete \(error)")
+                print("Can't delete entry \(error)")
             }
         }
     }
