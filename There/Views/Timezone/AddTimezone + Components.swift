@@ -1,3 +1,4 @@
+import AppKit
 import MapKit
 import SwiftUI
 
@@ -7,69 +8,105 @@ struct IconView: View {
     @Binding var image: NSImage?
     @Binding var countryEmoji: String
 
+    @State private var showPopover = false
+    @State private var isDropTargeted = false
+    @State private var showingXAccountInput = false
+    @State private var showingTGAccountInput = false
+    @State private var username = ""
+    @State private var debounceTask: Task<Void, Never>?
+
     var body: some View {
-        Group {
-            if image != nil {
-                ImageView(image: $image)
-            } else if !countryEmoji.isEmpty {
-                FlagView(countryEmoji: countryEmoji)
-            } else {
-                ImageView(image: $image)
-            }
-        }
+        iconContent
+            .frame(width: 70, height: 70)
+            .onTapGesture { showPopover = true }
+            .onDrop(of: [.image], isTargeted: $isDropTargeted, perform: handleDrop)
+            .popover(isPresented: $showPopover) { popoverContent }
     }
-}
 
-// MARK: - ImageView
-
-struct ImageView: View {
-    @Binding var image: NSImage?
-
-    var body: some View {
+    private var iconContent: some View {
         Group {
             if let image = image {
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 65, height: 65)
                     .clipShape(Circle())
+            } else if !countryEmoji.isEmpty {
+                flagView
             } else {
-                Circle()
-                    .fill(.gray.opacity(0.1))
-                    .frame(width: 65, height: 65)
-                    .overlay(alignment: .center) {
-                        Image(systemName: "photo.badge.plus")
-                            .font(.title)
-                            .foregroundColor(.gray.opacity(0.8))
+                placeholderView
+            }
+        }
+    }
+
+    private var flagView: some View {
+        Circle()
+            .fill(.white)
+            .overlay(Text(countryEmoji).font(.largeTitle))
+    }
+
+    private var placeholderView: some View {
+        Circle()
+            .fill(.gray.opacity(0.1))
+            .overlay(
+                Image(systemName: "photo.badge.plus")
+                    .font(.title)
+                    .foregroundColor(.gray.opacity(0.8))
+            )
+    }
+
+    private var popoverContent: some View {
+        VStack {
+            placeholderView
+                .frame(width: 70, height: 70)
+                .onDrop(of: [.image], isTargeted: $isDropTargeted) { providers in
+                    handleDrop(providers: providers)
+                    showPopover = false
+                    return true
+                }
+
+            Text("Please drop a photo here or")
+                .foregroundColor(.secondary)
+                .help("Dropping images might not work in the MenuBar :(")
+
+            importButtons
+
+            if showingXAccountInput {
+                SocialMediaInput(platform: "X", username: $username, image: $image, debounceTask: $debounceTask)
+                    .onSubmit {
+                        showPopover = false
+                    }
+            } else if showingTGAccountInput {
+                SocialMediaInput(platform: "Telegram", username: $username, image: $image, debounceTask: $debounceTask)
+                    .onSubmit {
+                        showPopover = false
                     }
             }
         }
-        .onTapGesture {
-            image = Utils.shared.selectPhoto()
+        .padding()
+    }
+
+    private var importButtons: some View {
+        HStack(alignment: .center, spacing: 0) {
+            Text("Import From").foregroundColor(.secondary)
+            Button("Telegram") { showingTGAccountInput = true }.buttonStyle(.link)
+            Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
+            Button("X") { showingXAccountInput = true }.buttonStyle(.link)
+            Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
+            Button("Finder") { image = Utils.shared.selectPhoto() }.buttonStyle(.link)
         }
     }
-}
 
-// MARK: - FlagView
+    private func handleDrop(providers: [NSItemProvider]) -> Bool {
+        guard let provider = providers.first else { return false }
 
-struct FlagView: View {
-    let countryEmoji: String
-
-    var body: some View {
-        Circle()
-            .fill(.white)
-            .frame(width: 65, height: 65)
-            .overlay(alignment: .center) {
-                if !countryEmoji.isEmpty {
-                    Text(countryEmoji)
-                        .font(.largeTitle)
-                } else {
-                    Image(systemName: "flag")
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.secondary)
+        provider.loadObject(ofClass: NSImage.self) { object, _ in
+            if let image = object as? NSImage {
+                DispatchQueue.main.async {
+                    self.image = image
                 }
             }
+        }
+        return true
     }
 }
 
