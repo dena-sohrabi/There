@@ -1,8 +1,11 @@
+import CoreLocation
 import SwiftUI
 
 struct EntryIcon: View {
     let entry: Entry
     @Environment(\.colorScheme) var scheme
+    @Environment(\.database) var database
+    @State private var useClockIcon: Bool = false
 
     var backgroundColor: Color {
         if scheme == .dark {
@@ -25,6 +28,11 @@ struct EntryIcon: View {
         .overlay(alignment: .bottomTrailing) {
             timeIcon
         }
+        .onAppear {
+            if entry.flag == nil || entry.flag!.isEmpty {
+                searchForFlag()
+            }
+        }
     }
 
     private var placeIcon: some View {
@@ -32,8 +40,14 @@ struct EntryIcon: View {
             .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
-                Text(entry.flag ?? "✈️")
-                    .font(.largeTitle)
+                if let flag = entry.flag {
+                    Text(flag)
+                        .font(.largeTitle)
+                } else {
+                    Image(systemName: "clock")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                }
             }
     }
 
@@ -67,9 +81,14 @@ struct EntryIcon: View {
             .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
-                Image(systemName: "clock")
-                    .foregroundColor(.secondary)
-                    .font(.largeTitle)
+                if let flag = entry.flag {
+                    Text(flag)
+                        .font(.largeTitle)
+                } else {
+                    Image(systemName: "clock")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                }
             }
     }
 
@@ -80,11 +99,30 @@ struct EntryIcon: View {
             .frame(width: 14, height: 14)
             .background(
                 TransparentBackgroundView()
-                    
                     .frame(width: 18, height: 18)
                     .cornerRadius(50)
             )
             .padding(.bottom, 4)
             .padding(.trailing, -3)
+    }
+
+    func searchForFlag() {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(entry.city) { placemarks, _ in
+            if let placemark = placemarks?.first, let timezone = placemark.timeZone {
+                Task {
+                    do {
+                        try await database.dbWriter.write { db in
+                            var entry = try Entry.fetchOne(db, id: entry.id)
+                            let countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                            entry?.flag = countryEmoji.isEmpty ? "🌍" : countryEmoji
+                            try entry?.update(db)
+                        }
+                    } catch {
+                        print("Can't find flag \(error)")
+                    }
+                }
+            }
+        }
     }
 }
