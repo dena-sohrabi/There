@@ -22,7 +22,15 @@ struct FormSection: View {
             StyledLabel(title: "Name")
             Input(text: $name, placeholder: "eg. Dena or London Office")
                 .padding(.bottom, 6)
-
+                .onSubmit {
+                    if selectedTimeZone != nil {
+                        saveEntry()
+                    } else {
+                        withAnimation(.easeIn(duration: 0.1)) {
+                            showError = true
+                        }
+                    }
+                }
             if !city.isEmpty {
                 SecondaryButton(title: city) {
                     withAnimation(.easeOut(duration: 0.1)) {
