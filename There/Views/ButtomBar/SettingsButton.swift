@@ -7,6 +7,7 @@ struct SettingsButton: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.database) var database: AppDatabase
     @Environment(\.colorScheme) var scheme
+    @AppStorage("launchAtLogin") private var launchAtLogin = false
 
     var backgroundColor: Color {
         if scheme == .dark {
@@ -18,15 +19,20 @@ struct SettingsButton: View {
 
     var body: some View {
         Menu {
-            Button("Open in new Window") {
-                appState.hideMenu()
-                openWindow(id: "app")
-            }
+            Toggle("Launch at Login", isOn: $launchAtLogin)
+                .onChange(of: launchAtLogin) { newValue in
+                    if newValue {
+                        installLaunchAgent()
+                    } else {
+                        uninstallLaunchAgent()
+                    }
+                }
+
             Section("Support") {
-                Button("Support via X") {
+                Button("DM on X") {
                     openURL(URL(string: "https://twitter.com/messages/compose?recipient_id=1434101346110689282")!)
                 }
-                Button("Support via Email") {
+                Button("Email us") {
                     openAppleMailComposer(to: "support@there.pm",
                                           subject: "Support Request",
                                           body: "Hello, I need assistance with...")
@@ -55,6 +61,16 @@ struct SettingsButton: View {
                     }
                 }
             #endif
+
+            Divider()
+            Button("Open in new Window") {
+                appState.hideMenu()
+                openWindow(id: "app")
+            }
+            Button("Quit") {
+                NSApplication.shared.terminate(nil)
+            }
+            .keyboardShortcut("q", modifiers: .command)
         } label: {
             Image(systemName: "gearshape.fill")
                 .font(.body)
