@@ -19,7 +19,6 @@ struct IconView: View {
         iconContent
             .frame(width: 70, height: 70)
             .onTapGesture { showPopover = true }
-            .onDrop(of: [.image], isTargeted: $isDropTargeted, perform: handleDrop)
             .popover(isPresented: $showPopover) { popoverContent }
     }
 
@@ -56,18 +55,6 @@ struct IconView: View {
 
     private var popoverContent: some View {
         VStack {
-            placeholderView
-                .frame(width: 70, height: 70)
-                .onDrop(of: [.image], isTargeted: $isDropTargeted) { providers in
-                    handleDrop(providers: providers)
-                    showPopover = false
-                    return true
-                }
-
-            Text("Please drop a photo here or")
-                .foregroundColor(.secondary)
-                .help("Dropping images might not work in the MenuBar :(")
-
             importButtons
 
             if showingXAccountInput {
@@ -87,14 +74,22 @@ struct IconView: View {
 
     private var importButtons: some View {
         HStack(alignment: .center, spacing: 0) {
-            Text("Import From").foregroundColor(.secondary)
-            Button("Telegram") { showingTGAccountInput = true }.buttonStyle(.link)
+            Text("Set From").foregroundColor(.secondary)
+            Button("Telegram") {
+                showingXAccountInput = false
+                showingTGAccountInput = true
+            }
+            .buttonStyle(.link)
+            .padding(.horizontal, 2)
             Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
-            Button("X") { showingXAccountInput = true }.buttonStyle(.link)
+            Button("X") {
+                showingTGAccountInput = false
+                showingXAccountInput = true
+            }
+            .buttonStyle(.link)
+            .padding(.horizontal, 2)
             Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
             Button("Finder") {
-                image = Utils.shared.selectPhoto()
-            }.buttonStyle(.link)
                 let selectedImage = Utils.shared.selectPhoto()
                 DispatchQueue.main.async {
                     self.image = selectedImage
