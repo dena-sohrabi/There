@@ -92,7 +92,9 @@ struct IconView: View {
             Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
             Button("X") { showingXAccountInput = true }.buttonStyle(.link)
             Text("/").foregroundColor(.secondary).padding(.horizontal, 2)
-            Button("Finder") { image = Utils.shared.selectPhoto() }.buttonStyle(.link)
+            Button("Finder") {
+                image = Utils.shared.selectPhoto()
+            }.buttonStyle(.link)
         }
     }
 
@@ -156,7 +158,6 @@ struct CitySearchResults: View {
                 }
                 .listStyle(PlainListStyle())
                 .onChange(of: selectedIndex) { newValue in
-                    print("Value is \(newValue)")
                     if newValue >= 0 {
                         // This handles all scrolling scenarios, including scrolling to the bottom
                         // when the last item is selected:
@@ -239,7 +240,6 @@ struct CitySearchResults: View {
                 if let placemark = placemarks?.first, let timezone = placemark.timeZone {
                     selectedTimezone = timezone
                     countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
-                    print(countryEmoji)
                 }
             }
         }

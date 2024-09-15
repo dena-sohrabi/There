@@ -50,7 +50,7 @@ extension AddTimezone {
                     flag: image == nil ? countryEmoji : "",
                     photoData: fileURL.absoluteString
                 )
-                print("entry \(entry)")
+                
                 try entry.save(db)
             }
         } catch {
