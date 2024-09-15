@@ -63,7 +63,7 @@ struct SocialMediaInput: View {
 
                             if !Task.isCancelled {
                                 do {
-                                    let imageUrl = "https://unavatar.io/\(platform.lowercased())/\(value)"
+                                    let imageUrl = "https://unavatar.io/\(platform.lowercased())/\(value.lowercased())"
                                     let fetchedImage = try await simpleImageFetch(from: imageUrl)
                                     await MainActor.run {
                                         self.image = NSImage(data: fetchedImage)
