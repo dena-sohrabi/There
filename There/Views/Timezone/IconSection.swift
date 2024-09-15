@@ -15,41 +15,7 @@ struct IconSection: View {
                 image: $image,
                 countryEmoji: $countryEmoji
             )
-            .padding(.top, 6)
-
-            HStack {
-                SocialMediaButton(
-                    imageName: "twitter",
-                    isHovered: $xHovered,
-                    action: {
-                        withAnimation(.bouncy(duration: 0.1)) {
-                            showingTGAccountInput = false
-                            showingXAccountInput.toggle()
-                        }
-                    }
-                )
-
-                SocialMediaButton(
-                    imageName: "telegram-logo",
-                    isHovered: $tgHovered,
-                    action: {
-                        withAnimation(.bouncy(duration: 0.1)) {
-                            showingXAccountInput = false
-                            showingTGAccountInput.toggle()
-                        }
-                    }
-                )
-            }
-            if image != nil {
-                RemoveButton {
-                    image = nil
-                }
-            }
-            if !countryEmoji.isEmpty {
-                UploadButton {
-                    image = Utils.shared.selectPhoto()
-                }
-            }
+            .padding(.bottom, 6)
         }
     }
 }
@@ -110,7 +76,6 @@ struct UploadButton: View {
             Text("Add From Finder")
                 .foregroundColor(.secondary)
                 .font(.caption)
-              
         }
         .padding(.horizontal, 2)
         .padding(.vertical, 2)
@@ -143,7 +108,7 @@ struct SocialMediaInput: View {
 
                     if !value.isEmpty {
                         debounceTask = Task {
-                            try? await Task.sleep(for: .milliseconds(300))
+                            try? await Task.sleep(for: .milliseconds(800))
 
                             if !Task.isCancelled {
                                 do {

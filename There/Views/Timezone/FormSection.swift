@@ -64,21 +64,21 @@ struct FormSection: View {
                     .transition(.opacity)
             }
 
-            if showingXAccountInput {
-                SocialMediaInput(
-                    platform: "X",
-                    username: $username,
-                    image: $image,
-                    debounceTask: $debounceTask
-                )
-            } else if showingTGAccountInput {
-                SocialMediaInput(
-                    platform: "Telegram",
-                    username: $username,
-                    image: $image,
-                    debounceTask: $debounceTask
-                )
-            }
+//            if showingXAccountInput {
+//                SocialMediaInput(
+//                    platform: "X",
+//                    username: $username,
+//                    image: $image,
+//                    debounceTask: $debounceTask
+//                )
+//            } else if showingTGAccountInput {
+//                SocialMediaInput(
+//                    platform: "Telegram",
+//                    username: $username,
+//                    image: $image,
+//                    debounceTask: $debounceTask
+//                )
+//            }
 
             PrimaryButton(title: "Add", action: {
                 if selectedTimeZone != nil {
@@ -93,3 +93,5 @@ struct FormSection: View {
         }
     }
 }
+
+

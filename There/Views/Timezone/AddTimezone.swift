@@ -20,50 +20,42 @@ struct AddTimezone: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            HStack(alignment: .top, spacing: 35) {
-                IconSection(
-                    image: $image,
-                    countryEmoji: $countryEmoji,
-                    showingXAccountInput: $showingXAccountInput,
-                    showingTGAccountInput: $showingTGAccountInput
-                )
+//            HStack(alignment: .top, spacing: 35) {
+            IconSection(
+                image: $image,
+                countryEmoji: $countryEmoji,
+                showingXAccountInput: $showingXAccountInput,
+                showingTGAccountInput: $showingTGAccountInput
+            )
 
-                FormSection(
-                    name: $name,
-                    city: $city,
-                    selectedTimeZone: $selectedTimeZone,
-                    isShowingPopover: $isShowingPopover,
-                    searchCompleter: searchCompleter,
-                    countryEmoji: $countryEmoji,
-                    image: $image,
-                    showingTGAccountInput: $showingTGAccountInput,
-                    showingXAccountInput: $showingXAccountInput,
-                    saveEntry: saveEntry
-                )
-            }
+            FormSection(
+                name: $name,
+                city: $city,
+                selectedTimeZone: $selectedTimeZone,
+                isShowingPopover: $isShowingPopover,
+                searchCompleter: searchCompleter,
+                countryEmoji: $countryEmoji,
+                image: $image,
+                showingTGAccountInput: $showingTGAccountInput,
+                showingXAccountInput: $showingXAccountInput,
+                saveEntry: saveEntry
+            )
+//            }
         }
-        .frame(maxHeight: .infinity)
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .padding()
+
         .onChange(of: countryEmoji) { newValue in
             print("countryEmoji changed: \(newValue)")
         }
-        .overlay(alignment: .top) {
-            Heading(title: "Add Timezone")
-                .padding(.top, 10)
-        }
         .overlay(alignment: .topLeading) {
-            Button {
-                router.cleanActiveRoute()
-            } label: {
-                Image(systemName: "chevron.left")
-            }
-
-            .padding(.top, 14)
+            Titlebar()
+                .padding(6)
         }
     }
 }
 
 #Preview {
     AddTimezone()
-        .frame(width: 380, height: 400)
+        .frame(width: 300, height: 400)
 }
