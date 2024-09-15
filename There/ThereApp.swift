@@ -46,23 +46,6 @@ struct ThereApp: App {
         .menuBarExtraAccess(isPresented: $appState.menuBarViewIsPresented)
         .windowResizability(.contentSize)
 
-        Window("There", id: "app") {
-            ContentView()
-                .environment(\.database, .shared)
-                .frame(width: 350)
-                .frame(minHeight: 200)
-                .frame(maxHeight: 400)
-                .background(TransparentBackgroundView().ignoresSafeArea())
-                .environmentObject(appState)
-                .environmentObject(router)
-        }
-        .windowStyle(.hiddenTitleBar)
-        .defaultPosition(.topLeading)
-        .windowResizability(.contentSize)
-        #if MAC_OS_VERSION_15_0
-            .windowManagerRole(.principal)
-            .windowLevel(.desktop)
-        #endif
         WindowGroup("init", id: "init") {
             InitialView()
                 .environment(\.database, .shared)
