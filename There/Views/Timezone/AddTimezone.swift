@@ -20,7 +20,6 @@ struct AddTimezone: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-//            HStack(alignment: .top, spacing: 35) {
             IconSection(
                 image: $image,
                 countryEmoji: $countryEmoji,
@@ -40,14 +39,9 @@ struct AddTimezone: View {
                 showingXAccountInput: $showingXAccountInput,
                 saveEntry: saveEntry
             )
-//            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .padding()
 
-        .onChange(of: countryEmoji) { newValue in
-            print("countryEmoji changed: \(newValue)")
-        }
         .overlay(alignment: .topLeading) {
             Titlebar()
                 .padding(6)
