@@ -20,7 +20,7 @@ struct Input: View {
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isFocused ? AdaptiveColors.textFieldBorder.opacity(0.8) : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
+                    .stroke(isFocused ? .blue : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
             )
             .focused($isFocused)
             .foregroundColor(AdaptiveColors.textColor)
@@ -41,7 +41,7 @@ struct CompactInput: View {
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isFocused ? AdaptiveColors.textFieldBorder.opacity(0.8) : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
+                    .stroke(isFocused ? .blue : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
             )
             .padding(.bottom)
             .focused($isFocused)
