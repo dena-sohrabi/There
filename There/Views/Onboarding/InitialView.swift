@@ -20,7 +20,7 @@ struct InitialView: View {
             #if DEBUG
                 return "http://localhost:8000"
             #else
-                return "https://inline.chat"
+                return "https://headline.inline.chat"
             #endif
         }
         let url = URL(string: "\(hostname)/api/there/signup")!
