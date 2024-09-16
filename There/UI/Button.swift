@@ -33,7 +33,7 @@ struct PrimaryButtonStyle: ButtonStyle {
                 }
             )
             .cornerRadius(8)
-            .shadow(color: .primary.opacity(0.08), radius: 1, x: 0, y: configuration.isPressed ? 0 : (hovered ? 3 : 1))
+            .shadow(color: .primary.opacity(0.08), radius: 0.5, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
@@ -95,7 +95,7 @@ struct SecondaryButtonStyle: ButtonStyle {
                 }
             )
             .cornerRadius(8)
-            .shadow(color: .primary.opacity(0.08), radius: 1, x: 0, y: configuration.isPressed ? 0 : (hovered ? 3 : 1))
+            .shadow(color: .primary.opacity(0.08), radius: 0.5, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
@@ -140,7 +140,7 @@ struct CompactButtonStyle: ButtonStyle {
             .frame(height: 28)
             .background(hovered ? (scheme == .dark ? Color(.gray).opacity(0.2) : .white) : (scheme == .dark ? Color(.gray).opacity(0.3) : .white.opacity(0.8)))
             .cornerRadius(8)
-            .shadow(color: .primary.opacity(0.04), radius: 1, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
+            .shadow(color: .primary.opacity(0.04), radius: 0.5, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in
@@ -187,7 +187,7 @@ struct CompactPrimaryButtonStyle: ButtonStyle {
                 }
             )
             .cornerRadius(8)
-            .shadow(color: .primary.opacity(0.08), radius: 1, x: 0, y: configuration.isPressed ? 0 : (hovered ? 3 : 1))
+            .shadow(color: .primary.opacity(0.08), radius: 0.5, x: 0, y: configuration.isPressed ? 0 : (hovered ? 2 : 1))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
             .onHover { hovering in

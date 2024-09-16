@@ -12,18 +12,8 @@ struct Input: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        TextField(placeholder, text: $text)
-            .textFieldStyle(.plain)
-            .padding(.horizontal, 6)
+        CustomTextInput(text: $text, placeholder: placeholder, isFocused: _isFocused)
             .frame(width: 200, height: 32)
-            .background(AdaptiveColors.textFieldBackground)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isFocused ? .blue : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
-            )
-            .focused($isFocused)
-            .foregroundColor(AdaptiveColors.textColor)
     }
 }
 
@@ -33,20 +23,10 @@ struct CompactInput: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        TextField(placeholder, text: $text)
-            .textFieldStyle(.plain)
-            .padding(.horizontal, 6)
+        CustomTextInput(text: $text, placeholder: placeholder, isFocused: _isFocused)
             .frame(height: 32)
-            .background(AdaptiveColors.textFieldBackground)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isFocused ? .blue : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
-            )
             .padding(.bottom)
-            .focused($isFocused)
             .scaledToFill()
-            .foregroundColor(AdaptiveColors.textColor)
     }
 }
 
@@ -58,20 +38,19 @@ struct AutocompleteInput: View {
 
     @State private var isEditing = false
     @State private var showSuggestions = false
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading) {
-            TextField(placeholder, text: $text, onEditingChanged: { editing in
-                isEditing = editing
-                showSuggestions = editing && !suggestions.isEmpty
-            }, onCommit: {
-                showSuggestions = false
-                onCommit()
-            })
-            .textFieldStyle(CustomTextFieldStyle(isFocused: isEditing))
-            .onChange(of: text) { _ in
-                showSuggestions = isEditing && !suggestions.isEmpty
-            }
+            CustomTextInput(text: $text, placeholder: placeholder, isFocused: _isFocused)
+                .frame(height: 32)
+                .onChange(of: isFocused) { focused in
+                    isEditing = focused
+                    showSuggestions = focused && !suggestions.isEmpty
+                }
+                .onChange(of: text) { _ in
+                    showSuggestions = isEditing && !suggestions.isEmpty
+                }
 
             if showSuggestions {
                 ScrollView {
@@ -96,19 +75,27 @@ struct AutocompleteInput: View {
     }
 }
 
-struct CustomTextFieldStyle: TextFieldStyle {
-    var isFocused: Bool
+struct CustomTextInput: View {
+    @Binding var text: String
+    var placeholder: String
+    @FocusState var isFocused: Bool
 
-    func _body(configuration: TextField<Self._Label>) -> some View {
-        configuration
-            .padding(.horizontal, 6)
-            .frame(height: 32)
-            .background(AdaptiveColors.textFieldBackground)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isFocused ? AdaptiveColors.textFieldBorder.opacity(0.8) : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
-            )
-            .foregroundColor(AdaptiveColors.textColor)
+    var body: some View {
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(AdaptiveColors.textFieldBackground)
+
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isFocused ? .blue : AdaptiveColors.textFieldBorder.opacity(0.5), lineWidth: 1)
+
+            TextField(placeholder, text: $text)
+                .textFieldStyle(.plain)
+                .padding(.horizontal, 6)
+                .foregroundColor(AdaptiveColors.textColor)
+                .focused($isFocused)
+        }
+        .onTapGesture {
+            isFocused = true
+        }
     }
 }
