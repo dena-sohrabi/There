@@ -21,7 +21,7 @@ struct ThereApp: App {
             ContentView()
                 .environment(\.database, .shared)
                 .frame(width: 320)
-                .frame(minHeight: 320)
+                .frame(minHeight: 350)
                 .frame(maxHeight: 500)
                 .background(Color(NSColor.windowBackgroundColor).opacity(0.78).ignoresSafeArea())
                 .environmentObject(appState)
