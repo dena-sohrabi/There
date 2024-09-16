@@ -17,7 +17,7 @@ struct BottomBarView: View {
                 Divider()
             }
         }
-        .background(Color(NSColor.windowBackgroundColor).opacity(0.78))
+//        .background(Color(NSColor.windowBackgroundColor).opacity(0.78))
         .animation(.default, value: isAtBottom)
     }
 }
