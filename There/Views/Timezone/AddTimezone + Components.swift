@@ -74,7 +74,7 @@ struct IconView: View {
 
     private var importButtons: some View {
         HStack(alignment: .center, spacing: 0) {
-            Text("Set From").foregroundColor(.secondary)
+            Text("Set from").foregroundColor(.secondary)
             Button("Telegram") {
                 showingXAccountInput = false
                 showingTGAccountInput = true
