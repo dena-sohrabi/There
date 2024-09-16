@@ -48,7 +48,7 @@ struct FormSection: View {
                     )
                 }
             } else {
-                SecondaryButton(title: "Add Location") {
+                SecondaryButton(title: "Set location / timezone") {
                     withAnimation(.easeOut(duration: 0.1)) {
                         showError = false
                     }
@@ -66,7 +66,7 @@ struct FormSection: View {
             }
 
             if showError {
-                Text("Please select a Location")
+                Text("please select a Location")
                     .font(.caption)
                     .foregroundColor(.red)
                     .fontWeight(.medium)

@@ -29,7 +29,7 @@ class SearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let commonOffsets = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         for offset in commonOffsets {
             let sign = offset >= 0 ? "+" : ""
-            defaultResults.append(SearchResult(title: "UTC\(sign)\(offset)", subtitle: "Coordinated Universal Time \(sign)\(offset)"))
+            defaultResults.append(SearchResult(title: "UTC\(sign)\(offset)", subtitle: ""))
         }
 
         // All timezones, locations, and their abbreviations
@@ -42,11 +42,8 @@ class SearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                     defaultResults.append(SearchResult(title: location, subtitle: region))
                 }
 
-                // Add abbreviations for both standard and daylight saving time
+                // Add abbreviations
                 if let abbreviation = timeZone.abbreviation() {
-                    defaultResults.append(SearchResult(title: abbreviation, subtitle: identifier))
-                }
-                if let abbreviation = timeZone.abbreviation(for: Date()) {
                     defaultResults.append(SearchResult(title: abbreviation, subtitle: identifier))
                 }
             }
@@ -69,6 +66,21 @@ class SearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
 
         defaultResults.append(SearchResult(title: "SF, CA", subtitle: "United States"))
+
+        // Add common time zone abbreviations
+        let commonAbbreviations = [
+            ("PST", "Pacific Standard Time"),
+            ("PDT", "Pacific Daylight Time"),
+            ("EST", "Eastern Standard Time"),
+            ("EDT", "Eastern Daylight Time"),
+            ("GMT", "Greenwich Mean Time"),
+            ("BST", "British Summer Time"),
+            ("IST", "India Standard Time"),
+        ]
+
+        for (abbr, fullName) in commonAbbreviations {
+            defaultResults.append(SearchResult(title: abbr, subtitle: fullName))
+        }
 
         defaultResults = Array(Set(defaultResults))
 

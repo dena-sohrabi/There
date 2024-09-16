@@ -148,7 +148,7 @@ struct CitySearchResults: View {
                     }) {
                         VStack(alignment: .leading) {
                             Text(result.title)
-                            Text(result.subtitle)
+                            Text(result.subtitle ?? "")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
