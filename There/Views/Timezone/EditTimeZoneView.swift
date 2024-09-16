@@ -62,7 +62,9 @@ struct EditTimeZoneView: View {
                 .padding(6)
         }
         .task {
-            await loadEntry()
+            if entry == nil {
+                await loadEntry()
+            }
         }
     }
 
