@@ -71,18 +71,8 @@ struct SettingsButton: View {
         } label: {
             Image(systemName: "gearshape.fill")
                 .font(.body)
-                .foregroundColor(settingsHovered ? .primary : .secondary)
         }
-        .onHover { hovering in
-            withAnimation {
-                settingsHovered = hovering
-            }
-        }
-        .frame(height: 28)
-        .padding(.horizontal, 8)
-        .background(settingsHovered ? backgroundColor : .clear)
-        .cornerRadius(8)
-        .buttonStyle(.plain)
+        .buttonStyle(SettingsButtonStyle())
     }
 
     func openAppleMailComposer(to recipient: String, subject: String? = nil, body: String? = nil) {
@@ -127,4 +117,27 @@ struct SettingsButton: View {
 
 #Preview {
     SettingsButton()
+}
+
+struct SettingsButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var scheme
+    @State private var isHovered = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(isHovered ? .primary : .secondary)
+            .frame(height: 28)
+            .padding(.horizontal, 8)
+            .background(isHovered ? backgroundColor : .clear)
+            .cornerRadius(8)
+            .onHover { hovering in
+                withAnimation {
+                    isHovered = hovering
+                }
+            }
+    }
+
+    private var backgroundColor: Color {
+        scheme == .dark ? Color(.gray).opacity(0.2) : .white
+    }
 }
