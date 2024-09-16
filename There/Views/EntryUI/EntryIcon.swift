@@ -17,10 +17,10 @@ struct EntryIcon: View {
 
     var body: some View {
         Group {
-            if entry.type == .place {
-                placeIcon
-            } else if let data = entry.photoData {
+            if let data = entry.photoData, !data.isEmpty {
                 photoIcon(data: data)
+            } else if let flag = entry.flag, !flag.isEmpty {
+                placeIcon
             } else {
                 defaultIcon
             }
@@ -81,14 +81,9 @@ struct EntryIcon: View {
             .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
-                if let flag = entry.flag {
-                    Text(flag)
-                        .font(.largeTitle)
-                } else {
-                    Image(systemName: "clock")
-                        .font(.largeTitle)
-                        .foregroundColor(.secondary)
-                }
+                Image(systemName: "clock")
+                    .font(.largeTitle)
+                    .foregroundColor(.secondary)
             }
     }
 

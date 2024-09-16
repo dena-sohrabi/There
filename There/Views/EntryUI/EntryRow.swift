@@ -4,6 +4,7 @@ struct EntryRow: View {
     let entry: Entry
     @State private var isHovered: Bool = false
     @Environment(\.colorScheme) var scheme
+    @EnvironmentObject var router: Router
 
     @State private var currentDate = Date()
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -27,10 +28,11 @@ struct EntryRow: View {
                 Text(formattedTime(timeZoneIdentifier: entry.timezoneIdentifier))
                     .monospaced()
                     .font(.body)
+
                 Text(formatTimeDifference())
                     .monospaced()
-                    .font(.body)
-                    .foregroundColor(timeDifferenceColor())
+                    .font(.callout)
+                    .foregroundColor(.gray)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -46,12 +48,29 @@ struct EntryRow: View {
         .onReceive(timer) { _ in
             currentDate = Date()
         }
+        .onTapGesture {
+            router.setActiveRoute(to: .editTimeZone(entryId: entry.id))
+        }
     }
 
     private func formattedTime(timeZoneIdentifier: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
         formatter.timeZone = TimeZone(identifier: timeZoneIdentifier)
+
+        // Get the system's locale
+        let locale = Locale.current
+
+        // Create a template that includes both 24-hour and 12-hour formats
+        let template = "j:mm"
+
+        // Generate the best format for the current locale
+        if let formatString = DateFormatter.dateFormat(fromTemplate: template, options: 0, locale: locale) {
+            formatter.dateFormat = formatString
+        } else {
+            // Fallback to a default format if generation fails
+            formatter.timeStyle = .short
+        }
+
         return formatter.string(from: currentDate)
     }
 
@@ -68,32 +87,11 @@ struct EntryRow: View {
         let minutes = difference.minute ?? 0
 
         if hours == 0 && minutes == 0 {
-            return "Same time"
+            return "same time"
         }
 
         let totalHours = Double(hours) + Double(minutes) / 60.0
 
         return String(format: "%+.1f hrs", totalHours)
-    }
-
-    private func timeDifferenceColor() -> Color {
-        let userTimeZone = TimeZone.current
-        let entryTimeZone = TimeZone(identifier: entry.timezoneIdentifier) ?? .current
-
-        let userDate = currentDate.addingTimeInterval(TimeInterval(userTimeZone.secondsFromGMT()))
-        let entryDate = currentDate.addingTimeInterval(TimeInterval(entryTimeZone.secondsFromGMT()))
-
-        let difference = Calendar.current.dateComponents([.hour, .minute], from: userDate, to: entryDate)
-
-        let hours = difference.hour ?? 0
-        let minutes = difference.minute ?? 0
-
-        if hours < 0 || (hours == 0 && minutes < 0) {
-            return .red
-        } else if hours == 0 && minutes == 0 {
-            return .gray
-        } else {
-            return .green
-        }
     }
 }
