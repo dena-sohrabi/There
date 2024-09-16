@@ -23,7 +23,7 @@ struct FormSection: View {
             Input(text: $name, placeholder: "eg. Dena or London Office")
                 .padding(.bottom, 6)
                 .onSubmit {
-                    if selectedTimeZone != nil {
+                    if  !city.isEmpty {
                         saveEntry()
                     } else {
                         withAnimation(.easeIn(duration: 0.1)) {
@@ -74,7 +74,7 @@ struct FormSection: View {
             }
 
             PrimaryButton(title: isEditing ? "Update" : "Add", action: {
-                if selectedTimeZone != nil {
+                if  !city.isEmpty {
                     saveEntry()
                 } else {
                     withAnimation(.easeIn(duration: 0.1)) {
