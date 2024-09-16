@@ -51,7 +51,7 @@ struct SocialMediaInput: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            StyledLabel(title: "Enter a \(platform) username")
+            StyledLabel(title: platform == "X" ? "Enter an \(platform) username" : "Enter a \(platform) username")
                 .padding(.top, 8)
             Input(text: $username, placeholder: "eg. dena_sohrabi")
                 .onChange(of: username) { value in
