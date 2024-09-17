@@ -15,9 +15,9 @@ struct BottomBarView: View {
         .overlay(alignment: .top) {
             if isAtBottom {
                 Divider()
+                    .padding(.top, -2)
             }
         }
-//        .background(Color(NSColor.windowBackgroundColor).opacity(0.78))
         .animation(.default, value: isAtBottom)
     }
 }
