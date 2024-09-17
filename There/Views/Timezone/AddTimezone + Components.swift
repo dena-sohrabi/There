@@ -120,7 +120,7 @@ struct CitySearchResultRow: View, Equatable {
         HStack {
             VStack(alignment: .leading) {
                 Text(result.title)
-           
+
                 Text(result.subtitle ?? "")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -245,23 +245,31 @@ struct CitySearchResults: View {
             break
         }
     }
+
     private func selectCity(_ result: TimeZoneSearchResult) {
         switch result.type {
         case .city:
             selectedCity = "\(result.title), \(result.subtitle)"
-            
-                Task {
-                    if let timezone = await result.getTimeZone() {
-                        await MainActor.run {
-                            selectedTimezone = timezone
-                        }
-                    } else {
-                        await MainActor.run {
-                            fallbackToGeocoding(for: selectedCity)
+
+            Task {
+                if let timezone = await result.getTimeZone() {
+                    await MainActor.run {
+                        selectedTimezone = timezone
+                        let geocoder = CLGeocoder()
+                        geocoder.geocodeAddressString(result.title) { [self] placemarks, _ in
+                            if let placemark = placemarks?.first, let timezone = selectedTimezone {
+                                countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                            }
                         }
                     }
+
+                  
+                } else {
+                    await MainActor.run {
+                        fallbackToGeocoding(for: selectedCity)
+                    }
                 }
-            
+            }
 
         case .abbreviation:
             selectedCity = result.title
@@ -273,7 +281,7 @@ struct CitySearchResults: View {
             selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
             countryEmoji = ""
         }
-        
+
         isShowingPopover = false
     }
 
@@ -286,7 +294,6 @@ struct CitySearchResults: View {
             }
         }
     }
-
 
 //    private func selectCity(_ result: TimeZoneSearchResult) {
 //
