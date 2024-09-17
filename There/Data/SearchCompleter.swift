@@ -1,16 +1,12 @@
 import Foundation
 import MapKit
 
-class TimeZoneSearchCompiler: NSObject, MKLocalSearchCompleterDelegate {
-    private let searchCompleter: MKLocalSearchCompleter
+class TimeZoneSearchCompiler: NSObject {
     private var commonAbbreviations: [String: (fullName: String, identifier: String)]
     private var utcOffsets: [String: String]
     private var currentCompletion: (([TimeZoneSearchResult]) -> Void)?
 
     override init() {
-        searchCompleter = MKLocalSearchCompleter()
-        searchCompleter.resultTypes = .address
-
         // Initialize common abbreviations
         commonAbbreviations = [
             // North America
@@ -77,77 +73,99 @@ class TimeZoneSearchCompiler: NSObject, MKLocalSearchCompleterDelegate {
         ]
 
         super.init()
-        searchCompleter.delegate = self
     }
 
     func search(query: String, completion: @escaping ([TimeZoneSearchResult]) -> Void) {
         currentCompletion = completion
-        searchCompleter.queryFragment = query
-    }
 
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let results = processResults(completer.results)
-        DispatchQueue.main.async { [weak self] in
-            self?.currentCompletion?(results)
+        let results = searchAbbreviations(query: query) + searchUTCOffsets(query: query)
+
+        if !results.isEmpty {
+            completion(results)
+            return
         }
-    }
 
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        print("Search completer error: \(error.localizedDescription)")
-        DispatchQueue.main.async { [weak self] in
-            self?.currentCompletion?([])
-        }
-    }
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+        request.resultTypes = .address
+        
 
-    private func processResults(_ suggestions: [MKLocalSearchCompletion]) -> [TimeZoneSearchResult] {
-        var results: [TimeZoneSearchResult] = []
+        let search = MKLocalSearch(request: request)
+        
+        search.start { [weak self] response, _ in
+            guard let self = self, let response = response else {
+                completion([])
+                return
+            }
 
-        // Add abbreviation results first
-        results += searchAbbreviations(query: searchCompleter.queryFragment)
-
-        // Add UTC offset results
-        results += searchUTCOffsets(query: searchCompleter.queryFragment)
-
-        // Process city results
-        for suggestion in suggestions {
-            let components = suggestion.title.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-            if components.count >= 2 {
-                let city = components[0]
-                let country = components.last ?? ""
-                results.append(TimeZoneSearchResult(title: city, subtitle: country, identifier: nil, type: .city, region: nil))
+            let results = self.processResults(response.mapItems)
+            DispatchQueue.main.async {
+                completion(results)
             }
         }
+    }
 
-        return results
+    private func processResults(_ mapItems: [MKMapItem]) -> [TimeZoneSearchResult] {
+        return mapItems.compactMap { item in
+//            guard let placemark = item.placemark else { return nil }
+            let placemark = item.placemark
+            
+
+            let city = placemark.locality ?? placemark.name ?? ""
+            let country = placemark.country ?? ""
+            // placemark.administrativeArea,
+            let subtitle = [country].compactMap { $0 }.joined(separator: ", ")
+
+            print("placemark.timeZone \(city) \(placemark)")
+            
+            return TimeZoneSearchResult(
+                title: city,
+                subtitle: subtitle,
+                identifier: placemark.timeZone?.identifier,
+                type: .city,
+                region: placemark.region,
+                coordinate: placemark.location
+            )
+        }
     }
 
     private func searchAbbreviations(query: String) -> [TimeZoneSearchResult] {
         return commonAbbreviations
             .filter { $0.key.lowercased().contains(query.lowercased()) }
-            .map { TimeZoneSearchResult(title: $0.key, subtitle: $0.value.fullName, identifier: $0.value.identifier, type: .abbreviation, region: nil) }
+            .map { TimeZoneSearchResult(title: $0.key, subtitle: $0.value.fullName, identifier: $0.value.identifier, type: .abbreviation, region: nil, coordinate: nil) }
     }
 
     private func searchUTCOffsets(query: String) -> [TimeZoneSearchResult] {
         return utcOffsets
             .filter { $0.key.lowercased().contains(query.lowercased()) }
-            .map { TimeZoneSearchResult(title: $0.key, subtitle: "Coordinated Universal Time Offset", identifier: $0.value, type: .utcOffset, region: nil) }
+            .map { TimeZoneSearchResult(title: $0.key, subtitle: "Coordinated Universal Time Offset", identifier: $0.value, type: .utcOffset, region: nil, coordinate: nil) }
     }
 }
 
-struct TimeZoneSearchResult: Identifiable {
+struct TimeZoneSearchResult: Identifiable, Equatable {
+    static func ==(lhs: TimeZoneSearchResult, rhs: TimeZoneSearchResult) -> Bool {
+        lhs.id == rhs.id && lhs.title == rhs.title && lhs.subtitle == rhs.subtitle && lhs.identifier == rhs.identifier && lhs.type == rhs.type && lhs.region == rhs.region
+    }
+    
     let id = UUID()
     let title: String
     let subtitle: String
     let identifier: String?
     let type: TimeZoneSearchResultType
     let region: CLRegion?
+    let coordinate: CLLocation?
 
-    func getTimeZone() -> TimeZone? {
+    func getTimeZone() async  -> TimeZone? {
         switch type {
         case .city:
+            print("title \(title) coordinate \(coordinate) region \(region)")
+            if let coordinate = coordinate {
+                
+                return await TimeZone.timeZone(for: coordinate)
+            }
             if let region = region as? CLCircularRegion {
                 let location = CLLocation(latitude: region.center.latitude, longitude: region.center.longitude)
-                return TimeZone.timeZone(for: location)
+                return await TimeZone.timeZone(for: location)
             }
             return nil
         case .abbreviation, .utcOffset:
@@ -163,19 +181,17 @@ enum TimeZoneSearchResultType {
 }
 
 extension TimeZone {
-    static func timeZone(for location: CLLocation) -> TimeZone? {
-        let geocoder = CLGeocoder()
-        var timeZone: TimeZone?
-
-        let semaphore = DispatchSemaphore(value: 0)
-        geocoder.reverseGeocodeLocation(location) { placemarks, _ in
-            timeZone = placemarks?.first?.timeZone
-            semaphore.signal()
-        }
-        semaphore.wait()
-
-        return timeZone
-    }
+    static func timeZone(for location: CLLocation) async -> TimeZone? {
+           let geocoder = CLGeocoder()
+           do {
+               let placemarks = try await geocoder.reverseGeocodeLocation(location)
+               print("\(placemarks)")
+               return placemarks.first?.timeZone
+           } catch {
+               print("Geocoding error: \(error.localizedDescription)")
+               return nil
+           }
+       }
 }
 
 class SearchCompleter: ObservableObject {
@@ -185,11 +201,7 @@ class SearchCompleter: ObservableObject {
             if queryFragment.isEmpty {
                 results = defaultResults
             } else {
-                timeZoneSearchCompiler.search(query: queryFragment) { [weak self] searchResults in
-                    DispatchQueue.main.async {
-                        self?.results = searchResults
-                    }
-                }
+                updateResults(for: queryFragment)
             }
         }
     }
@@ -209,7 +221,7 @@ class SearchCompleter: ObservableObject {
             if components.count >= 2 {
                 let location = String(components.last!).replacingOccurrences(of: "_", with: " ")
                 let region = String(components.first!)
-                defaultResults.append(TimeZoneSearchResult(title: location, subtitle: region, identifier: identifier, type: .city, region: nil))
+                defaultResults.append(TimeZoneSearchResult(title: location, subtitle: region, identifier: identifier, type: .city, region: nil, coordinate: nil))
             }
         }
 
@@ -218,19 +230,27 @@ class SearchCompleter: ObservableObject {
             let sign = offset >= 0 ? "+" : ""
             let title = "UTC\(sign)\(offset)"
             let identifier = "Etc/GMT\(offset == 0 ? "" : (offset > 0 ? "-" : "+") + "\(abs(offset))")"
-            defaultResults.append(TimeZoneSearchResult(title: title, subtitle: "Coordinated Universal Time Offset", identifier: identifier, type: .utcOffset, region: nil))
+            defaultResults.append(TimeZoneSearchResult(title: title, subtitle: "Coordinated Universal Time Offset", identifier: identifier, type: .utcOffset, region: nil, coordinate: nil))
         }
 
         results = defaultResults
     }
 
+    private var latestSearch = ""
+
     private func updateResults(for query: String) {
+        latestSearch = query
+
         if query.isEmpty {
             results = defaultResults
         } else {
             timeZoneSearchCompiler.search(query: query) { [weak self] searchResults in
                 DispatchQueue.main.async {
-                    self?.results = searchResults
+                    if self?.latestSearch == query {
+                        self?.results = searchResults
+                    } else {
+                        // discard
+                    }
                 }
             }
         }

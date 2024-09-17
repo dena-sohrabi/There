@@ -17,6 +17,7 @@ struct EntryRow: View {
                     .font(.title3)
                     .fontWeight(.medium)
                     .lineLimit(1)
+               
                 Text(entry.city)
                     .font(.body)
                     .foregroundColor(.secondary)

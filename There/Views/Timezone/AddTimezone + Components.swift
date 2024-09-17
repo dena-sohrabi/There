@@ -113,6 +113,29 @@ struct IconView: View {
     }
 }
 
+struct CitySearchResultRow: View, Equatable {
+    let result: TimeZoneSearchResult
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(result.title)
+           
+                Text(result.subtitle ?? "")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+    }
+
+    static func == (lhs: CitySearchResultRow, rhs: CitySearchResultRow) -> Bool {
+        lhs.result == rhs.result
+    }
+}
+
 // MARK: - CitySearchResults
 
 struct CitySearchResults: View {
@@ -143,20 +166,11 @@ struct CitySearchResults: View {
             ScrollViewReader { proxy in
                 List(searchCompleter.results.indices, id: \.self) { index in
                     let result = searchCompleter.results[index]
+
                     Button(action: {
-                        selectCity(result)
+                        self.selectCity(result)
                     }) {
-                        HStack{
-                            VStack(alignment: .leading) {
-                                Text(result.title)
-                                Text(result.subtitle ?? "")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .contentShape(Rectangle())
+                        CitySearchResultRow(result: result)
                     }
                     .buttonStyle(.plain)
                     .listRowBackground(selectedIndex == index ? Color.accentColor.opacity(0.1) : Color.clear)
@@ -231,26 +245,23 @@ struct CitySearchResults: View {
             break
         }
     }
-
     private func selectCity(_ result: TimeZoneSearchResult) {
         switch result.type {
         case .city:
             selectedCity = "\(result.title), \(result.subtitle)"
-            if let timezone = result.getTimeZone() {
-                selectedTimezone = timezone
-            } else {
-                // Fallback to geocoding if getTimeZone() returns nil
-                let geocoder = CLGeocoder()
-                geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
-                    if let placemark = placemarks?.first, let timezone = placemark.timeZone {
-                        DispatchQueue.main.async {
-                            self.selectedTimezone = timezone
+            
+                Task {
+                    if let timezone = await result.getTimeZone() {
+                        await MainActor.run {
+                            selectedTimezone = timezone
                         }
-                        countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                    } else {
+                        await MainActor.run {
+                            fallbackToGeocoding(for: selectedCity)
+                        }
                     }
                 }
-            }
-//            countryEmoji = Utils.shared.getCountryEmoji(for: result.subtitle)
+            
 
         case .abbreviation:
             selectedCity = result.title
@@ -262,9 +273,20 @@ struct CitySearchResults: View {
             selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
             countryEmoji = ""
         }
-
+        
         isShowingPopover = false
     }
+
+    private func fallbackToGeocoding(for address: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { [self] placemarks, _ in
+            if let placemark = placemarks?.first, let timezone = placemark.timeZone {
+                selectedTimezone = timezone
+                countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+            }
+        }
+    }
+
 
 //    private func selectCity(_ result: TimeZoneSearchResult) {
 //
