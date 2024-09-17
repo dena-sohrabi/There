@@ -146,12 +146,17 @@ struct CitySearchResults: View {
                     Button(action: {
                         selectCity(result)
                     }) {
-                        VStack(alignment: .leading) {
-                            Text(result.title)
-                            Text(result.subtitle ?? "")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                        HStack{
+                            VStack(alignment: .leading) {
+                                Text(result.title)
+                                Text(result.subtitle ?? "")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
                         }
+                        .frame(maxWidth: .infinity)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .listRowBackground(selectedIndex == index ? Color.accentColor.opacity(0.1) : Color.clear)
@@ -226,6 +231,7 @@ struct CitySearchResults: View {
             break
         }
     }
+
     private func selectCity(_ result: TimeZoneSearchResult) {
         switch result.type {
         case .city:
@@ -241,17 +247,16 @@ struct CitySearchResults: View {
                             self.selectedTimezone = timezone
                         }
                         countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
-
                     }
                 }
             }
 //            countryEmoji = Utils.shared.getCountryEmoji(for: result.subtitle)
-            
+
         case .abbreviation:
             selectedCity = result.title
             selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
             countryEmoji = ""
-            
+
         case .utcOffset:
             selectedCity = result.title
             selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
@@ -261,9 +266,8 @@ struct CitySearchResults: View {
         isShowingPopover = false
     }
 
-
 //    private func selectCity(_ result: TimeZoneSearchResult) {
-//        
+//
 //        selectedCity = "\(result.title), \(result.subtitle)"
 //        selectedTimezone = result.getTimeZone()
 //
@@ -280,7 +284,6 @@ struct CitySearchResults: View {
 //
 //        isShowingPopover = false
 //    }
-
 }
 
 struct CustomTextField: NSViewRepresentable {
