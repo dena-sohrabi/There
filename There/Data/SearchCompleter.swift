@@ -1,128 +1,238 @@
+import Foundation
 import MapKit
-import SwiftUI
 
-class SearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
-    @Published var results: [SearchResult] = []
+class TimeZoneSearchCompiler: NSObject, MKLocalSearchCompleterDelegate {
+    private let searchCompleter: MKLocalSearchCompleter
+    private var commonAbbreviations: [String: (fullName: String, identifier: String)]
+    private var utcOffsets: [String: String]
+    private var currentCompletion: (([TimeZoneSearchResult]) -> Void)?
+
+    override init() {
+        searchCompleter = MKLocalSearchCompleter()
+        searchCompleter.resultTypes = .address
+
+        // Initialize common abbreviations
+        commonAbbreviations = [
+            // North America
+            "EST": ("Eastern Standard Time", "America/New_York"),
+            "EDT": ("Eastern Daylight Time", "America/New_York"),
+            "CST": ("Central Standard Time", "America/Chicago"),
+            "CDT": ("Central Daylight Time", "America/Chicago"),
+            "MST": ("Mountain Standard Time", "America/Denver"),
+            "MDT": ("Mountain Daylight Time", "America/Denver"),
+            "PST": ("Pacific Standard Time", "America/Los_Angeles"),
+            "PDT": ("Pacific Daylight Time", "America/Los_Angeles"),
+            "AKST": ("Alaska Standard Time", "America/Anchorage"),
+            "AKDT": ("Alaska Daylight Time", "America/Anchorage"),
+            "HST": ("Hawaii Standard Time", "Pacific/Honolulu"),
+
+            // Europe
+            "GMT": ("Greenwich Mean Time", "Etc/GMT"),
+            "BST": ("British Summer Time", "Europe/London"),
+            "CET": ("Central European Time", "Europe/Paris"),
+            "CEST": ("Central European Summer Time", "Europe/Paris"),
+
+            // Asia
+            "IST": ("India Standard Time", "Asia/Kolkata"),
+            "JST": ("Japan Standard Time", "Asia/Tokyo"),
+
+            // Australia
+            "AEST": ("Australian Eastern Standard Time", "Australia/Sydney"),
+            "AEDT": ("Australian Eastern Daylight Time", "Australia/Sydney"),
+
+            // Coordinated Universal Time
+            "UTC": ("Coordinated Universal Time", "Etc/UTC"),
+        ]
+
+        // Initialize UTC offsets
+        utcOffsets = [
+            "UTC+0": "Etc/GMT",
+            "UTC-1": "Etc/GMT+1",
+            "UTC-2": "Etc/GMT+2",
+            "UTC-3": "Etc/GMT+3",
+            "UTC-4": "Etc/GMT+4",
+            "UTC-5": "Etc/GMT+5",
+            "UTC-6": "Etc/GMT+6",
+            "UTC-7": "Etc/GMT+7",
+            "UTC-8": "Etc/GMT+8",
+            "UTC-9": "Etc/GMT+9",
+            "UTC-10": "Etc/GMT+10",
+            "UTC-11": "Etc/GMT+11",
+            "UTC-12": "Etc/GMT+12",
+            "UTC+1": "Etc/GMT-1",
+            "UTC+2": "Etc/GMT-2",
+            "UTC+3": "Etc/GMT-3",
+            "UTC+4": "Etc/GMT-4",
+            "UTC+5": "Etc/GMT-5",
+            "UTC+5:30": "Asia/Kolkata",
+            "UTC+6": "Etc/GMT-6",
+            "UTC+7": "Etc/GMT-7",
+            "UTC+8": "Etc/GMT-8",
+            "UTC+9": "Etc/GMT-9",
+            "UTC+10": "Etc/GMT-10",
+            "UTC+11": "Etc/GMT-11",
+            "UTC+12": "Etc/GMT-12",
+            "UTC+13": "Pacific/Apia",
+            "UTC+14": "Pacific/Kiritimati",
+        ]
+
+        super.init()
+        searchCompleter.delegate = self
+    }
+
+    func search(query: String, completion: @escaping ([TimeZoneSearchResult]) -> Void) {
+        currentCompletion = completion
+        searchCompleter.queryFragment = query
+    }
+
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        let results = processResults(completer.results)
+        DispatchQueue.main.async { [weak self] in
+            self?.currentCompletion?(results)
+        }
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("Search completer error: \(error.localizedDescription)")
+        DispatchQueue.main.async { [weak self] in
+            self?.currentCompletion?([])
+        }
+    }
+
+    private func processResults(_ suggestions: [MKLocalSearchCompletion]) -> [TimeZoneSearchResult] {
+        var results: [TimeZoneSearchResult] = []
+
+        // Add abbreviation results first
+        results += searchAbbreviations(query: searchCompleter.queryFragment)
+
+        // Add UTC offset results
+        results += searchUTCOffsets(query: searchCompleter.queryFragment)
+
+        // Process city results
+        for suggestion in suggestions {
+            let components = suggestion.title.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            if components.count >= 2 {
+                let city = components[0]
+                let country = components.last ?? ""
+                results.append(TimeZoneSearchResult(title: city, subtitle: country, identifier: nil, type: .city, region: nil))
+            }
+        }
+
+        return results
+    }
+
+    private func searchAbbreviations(query: String) -> [TimeZoneSearchResult] {
+        return commonAbbreviations
+            .filter { $0.key.lowercased().contains(query.lowercased()) }
+            .map { TimeZoneSearchResult(title: $0.key, subtitle: $0.value.fullName, identifier: $0.value.identifier, type: .abbreviation, region: nil) }
+    }
+
+    private func searchUTCOffsets(query: String) -> [TimeZoneSearchResult] {
+        return utcOffsets
+            .filter { $0.key.lowercased().contains(query.lowercased()) }
+            .map { TimeZoneSearchResult(title: $0.key, subtitle: "Coordinated Universal Time Offset", identifier: $0.value, type: .utcOffset, region: nil) }
+    }
+}
+
+struct TimeZoneSearchResult: Identifiable {
+    let id = UUID()
+    let title: String
+    let subtitle: String
+    let identifier: String?
+    let type: TimeZoneSearchResultType
+    let region: CLRegion?
+
+    func getTimeZone() -> TimeZone? {
+        switch type {
+        case .city:
+            if let region = region as? CLCircularRegion {
+                let location = CLLocation(latitude: region.center.latitude, longitude: region.center.longitude)
+                return TimeZone.timeZone(for: location)
+            }
+            return nil
+        case .abbreviation, .utcOffset:
+            return identifier.flatMap { TimeZone(identifier: $0) }
+        }
+    }
+}
+
+enum TimeZoneSearchResultType {
+    case city
+    case abbreviation
+    case utcOffset
+}
+
+extension TimeZone {
+    static func timeZone(for location: CLLocation) -> TimeZone? {
+        let geocoder = CLGeocoder()
+        var timeZone: TimeZone?
+
+        let semaphore = DispatchSemaphore(value: 0)
+        geocoder.reverseGeocodeLocation(location) { placemarks, _ in
+            timeZone = placemarks?.first?.timeZone
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return timeZone
+    }
+}
+
+class SearchCompleter: ObservableObject {
+    @Published var results: [TimeZoneSearchResult] = []
     @Published var queryFragment: String = "" {
         didSet {
             if queryFragment.isEmpty {
                 results = defaultResults
             } else {
-                filterResults(for: queryFragment)
+                timeZoneSearchCompiler.search(query: queryFragment) { [weak self] searchResults in
+                    DispatchQueue.main.async {
+                        self?.results = searchResults
+                    }
+                }
             }
         }
     }
 
-    private let completer: MKLocalSearchCompleter
-    private var defaultResults: [SearchResult] = []
+    private let timeZoneSearchCompiler: TimeZoneSearchCompiler
+    private var defaultResults: [TimeZoneSearchResult] = []
 
-    override init() {
-        completer = MKLocalSearchCompleter()
-        super.init()
-        completer.delegate = self
-        completer.resultTypes = .address
+    init() {
+        timeZoneSearchCompiler = TimeZoneSearchCompiler()
         setupDefaultResults()
     }
 
     private func setupDefaultResults() {
-        // UTC common offsets
-        let commonOffsets = [-12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        for offset in commonOffsets {
-            let sign = offset >= 0 ? "+" : ""
-            defaultResults.append(SearchResult(title: "UTC\(sign)\(offset)", subtitle: ""))
-        }
-
-        // All timezones, locations, and their abbreviations
+        // All timezones and locations
         for identifier in TimeZone.knownTimeZoneIdentifiers {
-            if let timeZone = TimeZone(identifier: identifier) {
-                let components = identifier.split(separator: "/")
-                if components.count >= 2 {
-                    let location = String(components.last!).replacingOccurrences(of: "_", with: " ")
-                    let region = String(components.first!)
-                    defaultResults.append(SearchResult(title: location, subtitle: region))
-                }
-
-                // Add abbreviations
-                if let abbreviation = timeZone.abbreviation() {
-                    defaultResults.append(SearchResult(title: abbreviation, subtitle: identifier))
-                }
+            let components = identifier.split(separator: "/")
+            if components.count >= 2 {
+                let location = String(components.last!).replacingOccurrences(of: "_", with: " ")
+                let region = String(components.first!)
+                defaultResults.append(TimeZoneSearchResult(title: location, subtitle: region, identifier: identifier, type: .city, region: nil))
             }
         }
 
-        let cityAbbreviations = [
-            ("SF", "San Francisco, CA"),
-            ("LA", "Los Angeles, CA"),
-            ("NYC", "New York City, NY"),
-            ("DC", "Washington, D.C."),
-            ("CHI", "Chicago, IL"),
-            ("LDN", "London, UK"),
-            ("TYO", "Tokyo, Japan"),
-            ("SYD", "Sydney, Australia"),
-        ]
-
-        for (abbr, fullName) in cityAbbreviations {
-            defaultResults.append(SearchResult(title: abbr, subtitle: fullName))
-            defaultResults.append(SearchResult(title: fullName, subtitle: abbr))
+        // Add UTC offsets
+        for offset in -12 ... 14 {
+            let sign = offset >= 0 ? "+" : ""
+            let title = "UTC\(sign)\(offset)"
+            let identifier = "Etc/GMT\(offset == 0 ? "" : (offset > 0 ? "-" : "+") + "\(abs(offset))")"
+            defaultResults.append(TimeZoneSearchResult(title: title, subtitle: "Coordinated Universal Time Offset", identifier: identifier, type: .utcOffset, region: nil))
         }
-
-        defaultResults.append(SearchResult(title: "SF, CA", subtitle: "United States"))
-
-        // Add common time zone abbreviations
-        let commonAbbreviations = [
-            ("PST", "Pacific Standard Time"),
-            ("PDT", "Pacific Daylight Time"),
-            ("EST", "Eastern Standard Time"),
-            ("EDT", "Eastern Daylight Time"),
-            ("GMT", "Greenwich Mean Time"),
-            ("BST", "British Summer Time"),
-            ("IST", "India Standard Time"),
-        ]
-
-        for (abbr, fullName) in commonAbbreviations {
-            defaultResults.append(SearchResult(title: abbr, subtitle: fullName))
-        }
-
-        defaultResults = Array(Set(defaultResults))
 
         results = defaultResults
     }
 
-    private func filterResults(for query: String) {
-        let lowercasedQuery = query.lowercased()
-        results = defaultResults.filter { result in
-            let titleMatch = result.title.lowercased().contains(lowercasedQuery)
-            let subtitleMatch = result.subtitle.lowercased().contains(lowercasedQuery)
-            let abbrMatch = result.title.lowercased().components(separatedBy: .whitespaces).contains { $0.starts(with: lowercasedQuery) }
-            return titleMatch || subtitleMatch || abbrMatch
+    private func updateResults(for query: String) {
+        if query.isEmpty {
+            results = defaultResults
+        } else {
+            timeZoneSearchCompiler.search(query: query) { [weak self] searchResults in
+                DispatchQueue.main.async {
+                    self?.results = searchResults
+                }
+            }
         }
-
-        // If no results found in default results, use MKLocalSearchCompleter
-        if results.isEmpty {
-            completer.queryFragment = query
-        }
-    }
-
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let newResults = completer.results.map { SearchResult(title: $0.title, subtitle: $0.subtitle) }
-        results = Array(Set(results + newResults))
-    }
-
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        print("Error: \(error.localizedDescription)")
-    }
-}
-
-struct SearchResult: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let subtitle: String
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(title)
-        hasher.combine(subtitle)
-    }
-
-    static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
-        return lhs.title == rhs.title && lhs.subtitle == rhs.subtitle
     }
 }

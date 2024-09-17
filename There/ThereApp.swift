@@ -27,14 +27,14 @@ struct ThereApp: App {
                 .environmentObject(appState)
                 .environmentObject(router)
         } label: {
-//            let image: NSImage = {
-//                let ratio = $0.size.height / $0.size.width
-//                $0.size.height = 18
-//                $0.size.width = 18 / ratio
-//                return $0
-//            }(NSImage(named: "appIcon")!)
+            let image: NSImage = {
+                let ratio = $0.size.height / $0.size.width
+                $0.size.height = 20
+                $0.size.width = 20 / ratio
+                return $0
+            }(NSImage(named: "appIcon")!)
 
-            Image("appIcon")
+            Image(nsImage: image)
                 .onAppear {
                     if UserDefaults.standard.bool(forKey: "hasCompletedInitialSetup") == false {
                         openWindow(id: "init")

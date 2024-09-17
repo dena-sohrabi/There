@@ -226,27 +226,61 @@ struct CitySearchResults: View {
             break
         }
     }
+    private func selectCity(_ result: TimeZoneSearchResult) {
+        switch result.type {
+        case .city:
+            selectedCity = "\(result.title), \(result.subtitle)"
+            if let timezone = result.getTimeZone() {
+                selectedTimezone = timezone
+            } else {
+                // Fallback to geocoding if getTimeZone() returns nil
+                let geocoder = CLGeocoder()
+                geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
+                    if let placemark = placemarks?.first, let timezone = placemark.timeZone {
+                        DispatchQueue.main.async {
+                            self.selectedTimezone = timezone
+                        }
+                        countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
 
-    private func selectCity(_ result: SearchResult) {
-        selectedCity = "\(result.title), \(result.subtitle)"
-
-        if result.title.starts(with: "UTC") {
-            let offsetString = result.title.dropFirst(3)
-            if let offset = Int(offsetString) {
-                selectedTimezone = TimeZone(secondsFromGMT: offset * 3600)
-            }
-        } else {
-            let geocoder = CLGeocoder()
-            geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
-                if let placemark = placemarks?.first, let timezone = placemark.timeZone {
-                    selectedTimezone = timezone
-                    countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+                    }
                 }
             }
+//            countryEmoji = Utils.shared.getCountryEmoji(for: result.subtitle)
+            
+        case .abbreviation:
+            selectedCity = result.title
+            selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
+            countryEmoji = ""
+            
+        case .utcOffset:
+            selectedCity = result.title
+            selectedTimezone = result.identifier.flatMap { TimeZone(identifier: $0) }
+            countryEmoji = ""
         }
 
         isShowingPopover = false
     }
+
+
+//    private func selectCity(_ result: TimeZoneSearchResult) {
+//        
+//        selectedCity = "\(result.title), \(result.subtitle)"
+//        selectedTimezone = result.getTimeZone()
+//
+//        if result.type == .city {
+//            let geocoder = CLGeocoder()
+//            geocoder.geocodeAddressString(selectedCity) { placemarks, _ in
+//                if let placemark = placemarks?.first {
+//                    countryEmoji = Utils.shared.getCountryEmoji(for: placemark.isoCountryCode ?? "")
+//                }
+//            }
+//        } else {
+//            countryEmoji = ""
+//        }
+//
+//        isShowingPopover = false
+//    }
+
 }
 
 struct CustomTextField: NSViewRepresentable {

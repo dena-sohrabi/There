@@ -23,7 +23,7 @@ struct FormSection: View {
             Input(text: $name, placeholder: "eg. Dena or London Office")
                 .padding(.bottom, 6)
                 .onSubmit {
-                    if  !city.isEmpty {
+                    if !city.isEmpty {
                         saveEntry()
                     } else {
                         withAnimation(.easeIn(duration: 0.1)) {
@@ -74,7 +74,7 @@ struct FormSection: View {
             }
 
             PrimaryButton(title: isEditing ? "Update" : "Add", action: {
-                if  !city.isEmpty {
+                if !city.isEmpty {
                     saveEntry()
                 } else {
                     withAnimation(.easeIn(duration: 0.1)) {
@@ -82,6 +82,8 @@ struct FormSection: View {
                     }
                 }
             })
+            .disabled(city.isEmpty)
+            .opacity(city.isEmpty ? 0.6 : 1)
             .padding(.top, 8)
         }
     }
