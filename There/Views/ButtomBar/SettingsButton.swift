@@ -8,7 +8,7 @@ struct SettingsButton: View {
     @Environment(\.database) var database: AppDatabase
     @Environment(\.colorScheme) var scheme
     @AppStorage("launchAtLogin") private var launchAtLogin = false
-
+    @Binding var sortOrder: SortOrder
     var backgroundColor: Color {
         if scheme == .dark {
             return Color(.gray).opacity(0.2)
@@ -27,6 +27,12 @@ struct SettingsButton: View {
                         uninstallLaunchAgent()
                     }
                 }
+            Toggle("Ascending order", isOn: Binding(
+                get: { sortOrder == .timeAscending },
+                set: { newValue in
+                    sortOrder = newValue ? .timeAscending : .timeDescending
+                }
+            ))
 
             Section("Support") {
                 Button("DM on X") {
@@ -116,7 +122,7 @@ struct SettingsButton: View {
 }
 
 #Preview {
-    SettingsButton()
+    SettingsButton(sortOrder: .constant(.timeAscending))
 }
 
 struct SettingsButtonStyle: ButtonStyle {

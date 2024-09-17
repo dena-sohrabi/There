@@ -3,8 +3,8 @@ import Foundation
 import GRDB
 
 enum SortOrder {
-    case dayPeriodAscending
-    case dayPeriodDescending
+    case timeAscending
+    case timeDescending
 }
 
 class Fetcher: ObservableObject {
@@ -27,10 +27,10 @@ class Fetcher: ObservableObject {
 
     func sortEntries(by order: SortOrder) {
         switch order {
-        case .dayPeriodAscending:
-            entries.sort { $0.timeDifference.dayPeriod.rawValue < $1.timeDifference.dayPeriod.rawValue }
-        case .dayPeriodDescending:
-            entries.sort { $0.timeDifference.dayPeriod.rawValue > $1.timeDifference.dayPeriod.rawValue }
+        case .timeAscending:
+            entries.sort { $0.timeDifference.hours < $1.timeDifference.hours }
+        case .timeDescending:
+            entries.sort { $0.timeDifference.hours > $1.timeDifference.hours }
         }
     }
 }

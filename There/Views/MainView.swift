@@ -4,7 +4,7 @@ import SwiftUI
 struct MainView: View {
     @AppStorage("email") var email: String = ""
     @StateObject private var fetcher = Fetcher()
-    @State private var sortOrder: SortOrder = .dayPeriodDescending
+    @State private var sortOrder: SortOrder = .timeAscending
     @State private var sortedEntries: [Entry] = []
     @Environment(\.database) var database: AppDatabase
     @EnvironmentObject var appState: AppState
@@ -50,7 +50,7 @@ struct MainView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            BottomBarView(isAtBottom: $isAtBottom)
+            BottomBarView(isAtBottom: $isAtBottom, sortOrder : $sortOrder)
         }
         .frame(maxHeight: .infinity)
         .padding(.top, 6)
@@ -70,10 +70,10 @@ struct MainView: View {
 
     private func sortEntries() {
         switch sortOrder {
-        case .dayPeriodAscending:
-            sortedEntries = fetcher.entries.sorted { $0.timeDifference.dayPeriod.rawValue < $1.timeDifference.dayPeriod.rawValue }
-        case .dayPeriodDescending:
-            sortedEntries = fetcher.entries.sorted { $0.timeDifference.dayPeriod.rawValue > $1.timeDifference.dayPeriod.rawValue }
+        case .timeAscending:
+            sortedEntries = fetcher.entries.sorted { $0.timeDifference.hours < $1.timeDifference.hours }
+        case .timeDescending:
+            sortedEntries = fetcher.entries.sorted { $0.timeDifference.hours > $1.timeDifference.hours }
         }
     }
 

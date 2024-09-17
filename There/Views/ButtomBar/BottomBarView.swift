@@ -2,12 +2,13 @@ import SwiftUI
 
 struct BottomBarView: View {
     @Binding var isAtBottom: Bool
+    @Binding var sortOrder: SortOrder
 
     var body: some View {
         HStack(spacing: 2) {
             AddButton()
             Spacer()
-            SettingsButton()
+            SettingsButton(sortOrder: $sortOrder)
         }
         .padding(.horizontal, 8)
         .frame(maxWidth: .infinity)
@@ -23,5 +24,5 @@ struct BottomBarView: View {
 }
 
 #Preview {
-    BottomBarView(isAtBottom: .constant(true))
+    BottomBarView(isAtBottom: .constant(true), sortOrder: .constant(.timeDescending))
 }
