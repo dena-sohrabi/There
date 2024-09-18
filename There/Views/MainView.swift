@@ -1,4 +1,5 @@
 import GRDB
+import PostHog
 import SwiftUI
 
 struct MainView: View {
@@ -50,7 +51,7 @@ struct MainView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            BottomBarView(isAtBottom: $isAtBottom, sortOrder : $sortOrder)
+            BottomBarView(isAtBottom: $isAtBottom, sortOrder: $sortOrder)
         }
         .frame(maxHeight: .infinity)
         .padding(.top, 6)

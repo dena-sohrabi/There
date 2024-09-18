@@ -7,6 +7,7 @@
 
 import AppKit
 import MenuBarExtraAccess
+import PostHog
 import SwiftUI
 import UserNotifications
 
@@ -89,4 +90,12 @@ class AppState: ObservableObject {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_: Notification) {
+        let POSTHOG_API_KEY = "phc_XZFRnJFd8RVNegex9sLKplgz8KCFxGyLZwxh5usmoig"
+        let POSTHOG_HOST = "https://eu.i.posthog.com"
+
+        let config = PostHogConfig(apiKey: POSTHOG_API_KEY, host: POSTHOG_HOST)
+
+        PostHogSDK.shared.setup(config)
+    }
 }

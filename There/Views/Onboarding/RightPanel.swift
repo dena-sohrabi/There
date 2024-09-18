@@ -1,5 +1,6 @@
 // RightPanel.swift
 
+import PostHog
 import SwiftUI
 
 struct RightPanel: View {
@@ -7,7 +8,7 @@ struct RightPanel: View {
     let saveEmail: () -> Void
     @EnvironmentObject var appState: AppState
     @Environment(\.presentationMode) var presentationMode
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Please enter your email")
@@ -25,6 +26,7 @@ struct RightPanel: View {
             })
 
             SecondaryButton(title: "Skip", action: {
+                PostHogSDK.shared.capture("sign_up_skipped", properties: ["date": Date.now])
                 UserDefaults.standard.setValue(true, forKey: "hasCompletedInitialSetup")
                 appState.presentMenu()
                 presentationMode.wrappedValue.dismiss()

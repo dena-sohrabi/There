@@ -1,5 +1,6 @@
 // InitialView.swift
 
+import PostHog
 import SwiftUI
 
 struct InitialView: View {
@@ -44,9 +45,13 @@ struct InitialView: View {
     func saveEmail() {
         signupForThere(email: email) { success in
             if success {
+                PostHogSDK.shared.capture("user_signed_up",
+                                          userProperties: ["email": email],
+                                          userPropertiesSetOnce: ["date_of_sign_up": Date.now])
                 print("Signup successful")
                 UserDefaults.standard.set(email, forKey: "userEmail")
                 UserDefaults.standard.set(true, forKey: "hasCompletedInitialSetup")
+
             } else {
                 print("Signup failed")
             }

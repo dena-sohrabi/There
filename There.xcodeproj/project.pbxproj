@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DF82C8763570067CF04 /* KeychainSwift */; };
 		C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DFB2C87643C0067CF04 /* CryptoSwift */; };
+		C3560CD82C9AADBA009C7EBA /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = C3560CD72C9AADBA009C7EBA /* PostHog */; };
 		C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C357E5D02C877376003F9943 /* MenuBarExtraAccess */; };
 		C38562332C8719CB00858D54 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C38562322C8719CB00858D54 /* GRDB */; };
 /* End PBXBuildFile section */
@@ -85,6 +86,7 @@
 			files = (
 				C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */,
 				C38562332C8719CB00858D54 /* GRDB in Frameworks */,
+				C3560CD82C9AADBA009C7EBA /* PostHog in Frameworks */,
 				C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */,
 				C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */,
 			);
@@ -113,6 +115,7 @@
 				C325D0D62C85A95F0049EFC8 /* There */,
 				C325D0E82C85A9600049EFC8 /* ThereTests */,
 				C325D0F22C85A9600049EFC8 /* ThereUITests */,
+				C3560CD62C9AADBA009C7EBA /* Frameworks */,
 				C325D0D52C85A95F0049EFC8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +128,13 @@
 				C325D0EF2C85A9600049EFC8 /* ThereUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C3560CD62C9AADBA009C7EBA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,6 +161,7 @@
 				C3162DF82C8763570067CF04 /* KeychainSwift */,
 				C3162DFB2C87643C0067CF04 /* CryptoSwift */,
 				C357E5D02C877376003F9943 /* MenuBarExtraAccess */,
+				C3560CD72C9AADBA009C7EBA /* PostHog */,
 			);
 			productName = There;
 			productReference = C325D0D42C85A95F0049EFC8 /* There.app */;
@@ -239,6 +250,7 @@
 				C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */,
 				C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */,
 				C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */,
+				C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C325D0D52C85A95F0049EFC8 /* Products */;
@@ -658,6 +670,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../Downloads/CryptoSwift-main";
 		};
+		C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Downloads/posthog-ios-main";
+		};
 		C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../Downloads/MenuBarExtraAccess-main";
@@ -676,6 +692,11 @@
 		C3162DFB2C87643C0067CF04 /* CryptoSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CryptoSwift;
+		};
+		C3560CD72C9AADBA009C7EBA /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */;
+			productName = PostHog;
 		};
 		C357E5D02C877376003F9943 /* MenuBarExtraAccess */ = {
 			isa = XCSwiftPackageProductDependency;
