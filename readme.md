@@ -33,7 +33,7 @@ Contributions are welcome! For simple fixes or improvements feel free to open a 
 
 For features or improvements that add scope to the app or have user facing changes, please open an issue first to discuss your proposal.
 
-If you want to add APIs that enable integrations for example for Raycast, feel free to open an issue too!
+If you want to tackle any of the items in the roadmap section, please also open an issue.
 
 ## License
 
