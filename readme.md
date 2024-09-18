@@ -18,6 +18,15 @@ brew install --cask there
 - Written in Swift UI
 - macOS 13+
 
+## Roadmap
+
+We want to keep the app as simple as possible. But here are the things we're considering for future versions:
+
+- [ ] Widgets
+- [ ] Time slider to view future/past times
+- [ ] Auto-update
+- [ ] Apple Script API for third-party integrations i.e. Raycast
+
 ## Contributions
 
 Contributions are welcome! For simple fixes or improvements feel free to open a PR with the smallest change.
