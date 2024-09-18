@@ -251,6 +251,7 @@
 				C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */,
 				C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */,
 				C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */,
+				CD8311052C99A18A008EEF3A /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C325D0D52C85A95F0049EFC8 /* Products */;
@@ -683,6 +684,17 @@
 			relativePath = "../../Downloads/GRDB.swift-master";
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CD8311052C99A18A008EEF3A /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		C3162DF82C8763570067CF04 /* KeychainSwift */ = {
