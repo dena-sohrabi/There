@@ -19,7 +19,7 @@ struct EntryIcon: View {
         Group {
             if let data = entry.photoData, !data.isEmpty {
                 photoIcon(data: data)
-            } else if let flag = entry.flag, !flag.isEmpty {
+            } else if let flag = entry.flag {
                 placeIcon
             } else {
                 defaultIcon
@@ -81,9 +81,14 @@ struct EntryIcon: View {
             .fill(backgroundColor)
             .frame(width: 45)
             .overlay {
-                Image(systemName: "clock")
-                    .font(.largeTitle)
-                    .foregroundColor(.secondary)
+                if let flag = entry.flag, !flag.isEmpty {
+                    Text(flag)
+                        .font(.largeTitle)
+                } else {
+                    Image(systemName: "clock")
+                        .font(.largeTitle)
+                        .foregroundColor(.secondary)
+                }
             }
     }
 
