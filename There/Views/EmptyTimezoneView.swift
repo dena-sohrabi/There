@@ -7,11 +7,12 @@ struct EmptyTimezoneView: View {
                 .resizable()
                 .frame(width: 158, height: 140)
                 .padding(.bottom, 8)
-            Text("No Timezones Yet")
+                .padding(.leading, -43)
+            Text("Hey There!")
                 .font(.title)
                 .fontWeight(.medium)
 
-            Text("Please Add your first timezones")
+            Text("Add your first timezone")
                 .foregroundColor(.secondary)
         }
     }
