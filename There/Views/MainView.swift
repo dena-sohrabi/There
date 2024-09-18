@@ -187,26 +187,6 @@ struct EntryTimeSlider: View {
         return formatter.string(from: offsetDate)
     }
 
-//    private var adjustedTimeString: String {
-//        let adjustedDate = Date().addingTimeInterval(timeOffset * 3600)
-//        let formatter = DateFormatter()
-//        // Get the system's locale
-//        let locale = Locale.current
-//
-//        // Create a template that includes both 24-hour and 12-hour formats
-//        let template = "j:mm"
-//
-//        // Generate the best format for the current locale
-//        if let formatString = DateFormatter.dateFormat(fromTemplate: template, options: 0, locale: locale) {
-//            formatter.dateFormat = formatString
-//        } else {
-//            // Fallback to a default format if generation fails
-//            formatter.timeStyle = .short
-//        }
-//
-//        return formatter.string(from: adjustedDate)
-//    }
-
     private func performHapticFeedback() {
         NSHapticFeedbackManager.defaultPerformer.perform(.levelChange, performanceTime: .default)
     }
