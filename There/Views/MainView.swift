@@ -76,8 +76,7 @@ struct MainView: View {
             let id = PostHogSDK.shared.getAnonymousId()
             PostHogSDK.shared.identify(id, userProperties: ["email": UserDefaults.standard.string(forKey: "userEmail") ?? ""])
         }
-//        .onChange(of: timeOffset) { _, _ in
-//        }
+
     }
 
     private func sortEntries() {
@@ -128,20 +127,23 @@ struct EntryTimeSlider: View {
                     .monospaced()
                     .font(.callout)
                     .foregroundColor(.gray)
-
+                    .contentTransition(.numericText())
                 Spacer()
                 Text(formattedTime())
                     .monospaced()
                     .font(.body)
                     .fontWeight(.semibold)
+                    .contentTransition(.numericText())
             }
             Slider(value: $currentHour, in: 0 ... 23.5, step: 0.5)
                 .onChange(of: currentHour) { newValue in
-                    timeOffset = newValue - Date().hour
-                    if Int(newValue) != Int(previousValue) {
-                        performHapticFeedback()
+                    withAnimation {
+                        timeOffset = newValue - Date().hour
+                        if Int(newValue) != Int(previousValue) {
+                            performHapticFeedback()
+                        }
+                        previousValue = newValue
                     }
-                    previousValue = newValue
                 }
         }
         .padding(.vertical, 8)

@@ -28,10 +28,12 @@ struct EntryRow: View {
             .padding(.leading, 6)
             Spacer()
             VStack(alignment: .trailing) {
-                Text(formattedTime(timeZoneIdentifier: entry.timezoneIdentifier))
-                    .monospaced()
-                    .font(.body)
-
+                HStack(spacing: 0) {
+                    Text(formattedTime(timeZoneIdentifier: entry.timezoneIdentifier))
+                        .monospaced()
+                        .font(.body)
+                        .contentTransition(.numericText())
+                }
                 Text(formatTimeDifference())
                     .monospaced()
                     .font(.callout)
