@@ -3,11 +3,24 @@ import SwiftUI
 struct BottomBarView: View {
     @Binding var isAtBottom: Bool
     @Binding var sortOrder: SortOrder
+    @Binding var showSlider: Bool
 
     var body: some View {
         HStack(spacing: 2) {
             AddButton()
             Spacer()
+
+            Button {
+                withAnimation {
+                    showSlider.toggle()
+                }
+            } label: {
+                Image(systemName: "clock.arrow.2.circlepath")
+                    .font(.body)
+            }
+            .buttonStyle(SettingsButtonStyle())
+            .help("Time Slider")
+
             SettingsButton(sortOrder: $sortOrder)
         }
         .padding(.horizontal, 8)
@@ -24,5 +37,5 @@ struct BottomBarView: View {
 }
 
 #Preview {
-    BottomBarView(isAtBottom: .constant(true), sortOrder: .constant(.timeDescending))
+    BottomBarView(isAtBottom: .constant(true), sortOrder: .constant(.timeDescending), showSlider: .constant(false))
 }

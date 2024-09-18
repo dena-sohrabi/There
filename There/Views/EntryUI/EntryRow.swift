@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 
 struct EntryRow: View {
@@ -5,9 +6,10 @@ struct EntryRow: View {
     @State private var isHovered: Bool = false
     @Environment(\.colorScheme) var scheme
     @EnvironmentObject var router: Router
-
+    @Environment(\.scenePhase) private var scenePhase
     @State private var currentDate = Date()
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
+    @Binding var timeOffset: Double
 
     var body: some View {
         HStack {
@@ -17,7 +19,7 @@ struct EntryRow: View {
                     .font(.title3)
                     .fontWeight(.medium)
                     .lineLimit(1)
-               
+
                 Text(entry.city)
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -46,11 +48,17 @@ struct EntryRow: View {
                 self.isHovered = isHovered
             }
         }
-        .onReceive(timer) { _ in
+        .onReceive(timer ?? Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             currentDate = Date()
         }
         .onTapGesture {
             router.setActiveRoute(to: .editTimeZone(entryId: entry.id))
+        }
+        .onChange(of: scenePhase) { newPhase in
+            updateTimer(for: newPhase)
+        }
+        .onAppear {
+            updateTimer(for: scenePhase)
         }
     }
 
@@ -71,8 +79,9 @@ struct EntryRow: View {
             // Fallback to a default format if generation fails
             formatter.timeStyle = .short
         }
+        let offsetDate = Date().addingTimeInterval(timeOffset * 3600)
 
-        return formatter.string(from: currentDate)
+        return formatter.string(from: offsetDate)
     }
 
     private func formatTimeDifference() -> String {
@@ -94,5 +103,18 @@ struct EntryRow: View {
         let totalHours = Double(hours) + Double(minutes) / 60.0
 
         return String(format: "%+.1f hrs", totalHours)
+    }
+
+    private func updateTimer(for phase: ScenePhase) {
+        timer?.upstream.connect().cancel()
+
+        switch phase {
+        case .active:
+            timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        case .inactive, .background:
+            timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+        @unknown default:
+            timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        }
     }
 }
