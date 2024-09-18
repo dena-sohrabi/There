@@ -10,6 +10,9 @@
 		C3560CD82C9AADBA009C7EBA /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = C3560CD72C9AADBA009C7EBA /* PostHog */; };
 		C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C357E5D02C877376003F9943 /* MenuBarExtraAccess */; };
 		C38562332C8719CB00858D54 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C38562322C8719CB00858D54 /* GRDB */; };
+		C3B49DB92C9B3E820025E73F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B49DB82C9B3E820025E73F /* WidgetKit.framework */; };
+		C3B49DBB2C9B3E820025E73F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B49DBA2C9B3E820025E73F /* SwiftUI.framework */; };
+		C3B49DC92C9B3E840025E73F /* There-WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C3B49DB72C9B3E820025E73F /* There-WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,12 +30,36 @@
 			remoteGlobalIDString = C325D0D32C85A95F0049EFC8;
 			remoteInfo = There;
 		};
+		C3B49DC72C9B3E840025E73F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C325D0CC2C85A95F0049EFC8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3B49DB62C9B3E820025E73F;
+			remoteInfo = "There-WidgetExtension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C3B49DCA2C9B3E840025E73F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C3B49DC92C9B3E840025E73F /* There-WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C325D0D42C85A95F0049EFC8 /* There.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = There.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C325D0E52C85A9600049EFC8 /* ThereTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThereTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C325D0EF2C85A9600049EFC8 /* ThereUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThereUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3B49DB72C9B3E820025E73F /* There-WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "There-WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3B49DB82C9B3E820025E73F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		C3B49DBA2C9B3E820025E73F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -42,6 +69,13 @@
 				"Views/CLAuthorizationStatus+Description.swift ",
 			);
 			target = C325D0D32C85A95F0049EFC8 /* There */;
+		};
+		C3B49DCE2C9B3E840025E73F /* Exceptions for "There-Widget" folder in "There-WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C3B49DB62C9B3E820025E73F /* There-WidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -75,6 +109,14 @@
 			path = ThereUITests;
 			sourceTree = "<group>";
 		};
+		C3B49DBC2C9B3E820025E73F /* There-Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C3B49DCE2C9B3E840025E73F /* Exceptions for "There-Widget" folder in "There-WidgetExtension" target */,
+			);
+			path = "There-Widget";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +144,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C3B49DB42C9B3E820025E73F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3B49DBB2C9B3E820025E73F /* SwiftUI.framework in Frameworks */,
+				C3B49DB92C9B3E820025E73F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,6 +162,7 @@
 				C325D0D62C85A95F0049EFC8 /* There */,
 				C325D0E82C85A9600049EFC8 /* ThereTests */,
 				C325D0F22C85A9600049EFC8 /* ThereUITests */,
+				C3B49DBC2C9B3E820025E73F /* There-Widget */,
 				C3560CD62C9AADBA009C7EBA /* Frameworks */,
 				C325D0D52C85A95F0049EFC8 /* Products */,
 			);
@@ -122,6 +174,7 @@
 				C325D0D42C85A95F0049EFC8 /* There.app */,
 				C325D0E52C85A9600049EFC8 /* ThereTests.xctest */,
 				C325D0EF2C85A9600049EFC8 /* ThereUITests.xctest */,
+				C3B49DB72C9B3E820025E73F /* There-WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,6 +182,8 @@
 		C3560CD62C9AADBA009C7EBA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C3B49DB82C9B3E820025E73F /* WidgetKit.framework */,
+				C3B49DBA2C9B3E820025E73F /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -143,10 +198,12 @@
 				C325D0D02C85A95F0049EFC8 /* Sources */,
 				C325D0D12C85A95F0049EFC8 /* Frameworks */,
 				C325D0D22C85A95F0049EFC8 /* Resources */,
+				C3B49DCA2C9B3E840025E73F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C3B49DC82C9B3E840025E73F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C325D0D62C85A95F0049EFC8 /* There */,
@@ -207,6 +264,28 @@
 			productReference = C325D0EF2C85A9600049EFC8 /* ThereUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		C3B49DB62C9B3E820025E73F /* There-WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3B49DCD2C9B3E840025E73F /* Build configuration list for PBXNativeTarget "There-WidgetExtension" */;
+			buildPhases = (
+				C3B49DB32C9B3E820025E73F /* Sources */,
+				C3B49DB42C9B3E820025E73F /* Frameworks */,
+				C3B49DB52C9B3E820025E73F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C3B49DBC2C9B3E820025E73F /* There-Widget */,
+			);
+			name = "There-WidgetExtension";
+			packageProductDependencies = (
+			);
+			productName = "There-WidgetExtension";
+			productReference = C3B49DB72C9B3E820025E73F /* There-WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -227,6 +306,9 @@
 					C325D0EE2C85A9600049EFC8 = {
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = C325D0D32C85A95F0049EFC8;
+					};
+					C3B49DB62C9B3E820025E73F = {
+						CreatedOnToolsVersion = 16.1;
 					};
 				};
 			};
@@ -253,6 +335,7 @@
 				C325D0D32C85A95F0049EFC8 /* There */,
 				C325D0E42C85A9600049EFC8 /* ThereTests */,
 				C325D0EE2C85A9600049EFC8 /* ThereUITests */,
+				C3B49DB62C9B3E820025E73F /* There-WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -273,6 +356,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C325D0ED2C85A9600049EFC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3B49DB52C9B3E820025E73F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -303,6 +393,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C3B49DB32C9B3E820025E73F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -315,6 +412,11 @@
 			isa = PBXTargetDependency;
 			target = C325D0D32C85A95F0049EFC8 /* There */;
 			targetProxy = C325D0F02C85A9600049EFC8 /* PBXContainerItemProxy */;
+		};
+		C3B49DC82C9B3E840025E73F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3B49DB62C9B3E820025E73F /* There-WidgetExtension */;
+			targetProxy = C3B49DC72C9B3E840025E73F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -613,6 +715,66 @@
 			};
 			name = Release;
 		};
+		C3B49DCB2C9B3E840025E73F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "There-Widget/There_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2487AN8AL4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "There-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "There-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pm.there.There.There-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C3B49DCC2C9B3E840025E73F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "There-Widget/There_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2487AN8AL4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "There-Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "There-Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pm.there.There.There-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -648,6 +810,15 @@
 			buildConfigurations = (
 				C325D1002C85A9600049EFC8 /* Debug */,
 				C325D1012C85A9600049EFC8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3B49DCD2C9B3E840025E73F /* Build configuration list for PBXNativeTarget "There-WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3B49DCB2C9B3E840025E73F /* Debug */,
+				C3B49DCC2C9B3E840025E73F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -24,10 +24,15 @@
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>
+		<key>There-WidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>There.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>3</integer>
 		</dict>
 		<key>Tour (Playground) 1.xcscheme</key>
 		<dict>
