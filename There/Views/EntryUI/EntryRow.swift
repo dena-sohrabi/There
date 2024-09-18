@@ -114,7 +114,7 @@ struct EntryRow: View {
         case .inactive, .background:
             timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
         @unknown default:
-            timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+            timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
         }
     }
 }

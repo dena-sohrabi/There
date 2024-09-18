@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DF82C8763570067CF04 /* KeychainSwift */; };
-		C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C3162DFB2C87643C0067CF04 /* CryptoSwift */; };
 		C3560CD82C9AADBA009C7EBA /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = C3560CD72C9AADBA009C7EBA /* PostHog */; };
 		C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C357E5D02C877376003F9943 /* MenuBarExtraAccess */; };
 		C38562332C8719CB00858D54 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C38562322C8719CB00858D54 /* GRDB */; };
@@ -84,11 +82,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3162DF92C8763570067CF04 /* KeychainSwift in Frameworks */,
 				C38562332C8719CB00858D54 /* GRDB in Frameworks */,
 				C3560CD82C9AADBA009C7EBA /* PostHog in Frameworks */,
 				C357E5D12C877376003F9943 /* MenuBarExtraAccess in Frameworks */,
-				C3162DFC2C87643C0067CF04 /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,8 +154,6 @@
 			name = There;
 			packageProductDependencies = (
 				C38562322C8719CB00858D54 /* GRDB */,
-				C3162DF82C8763570067CF04 /* KeychainSwift */,
-				C3162DFB2C87643C0067CF04 /* CryptoSwift */,
 				C357E5D02C877376003F9943 /* MenuBarExtraAccess */,
 				C3560CD72C9AADBA009C7EBA /* PostHog */,
 			);
@@ -247,8 +241,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C38562312C8719CB00858D54 /* XCLocalSwiftPackageReference "../../Downloads/GRDB.swift-master" */,
-				C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */,
-				C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */,
 				C357E5CF2C877376003F9943 /* XCLocalSwiftPackageReference "../../Downloads/MenuBarExtraAccess-main" */,
 				C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */,
 				CD8311052C99A18A008EEF3A /* XCRemoteSwiftPackageReference "Sparkle" */,
@@ -663,14 +655,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		C3162DF72C8763570067CF04 /* XCLocalSwiftPackageReference "../../Downloads/keychain-swift-master" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../Downloads/keychain-swift-master";
-		};
-		C3162DFA2C87643C0067CF04 /* XCLocalSwiftPackageReference "../../Downloads/CryptoSwift-main" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../Downloads/CryptoSwift-main";
-		};
 		C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../Downloads/posthog-ios-main";
@@ -697,14 +681,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C3162DF82C8763570067CF04 /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = KeychainSwift;
-		};
-		C3162DFB2C87643C0067CF04 /* CryptoSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CryptoSwift;
-		};
 		C3560CD72C9AADBA009C7EBA /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C3560CD32C9AACFB009C7EBA /* XCLocalSwiftPackageReference "../../Downloads/posthog-ios-main" */;

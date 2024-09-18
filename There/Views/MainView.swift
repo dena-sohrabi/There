@@ -4,7 +4,6 @@ import PostHog
 import SwiftUI
 
 struct MainView: View {
-    @State private var email: String = ""
     @StateObject private var fetcher = Fetcher()
     @State private var sortOrder: SortOrder = .timeAscending
     @State private var sortedEntries: [Entry] = []
@@ -66,7 +65,6 @@ struct MainView: View {
         .padding(.top, 6)
         .onAppear {
             sortEntries()
-            decodeAndSetEmail()
         }
         .onChange(of: sortOrder) { _ in
             sortEntries()
@@ -76,7 +74,7 @@ struct MainView: View {
         }
         .task {
             let id = PostHogSDK.shared.getAnonymousId()
-            PostHogSDK.shared.identify(id, userProperties: ["email": email])
+            PostHogSDK.shared.identify(id, userProperties: ["email": UserDefaults.standard.string(forKey: "userEmail") ?? ""])
         }
 //        .onChange(of: timeOffset) { _, _ in
 //        }
@@ -101,16 +99,6 @@ struct MainView: View {
             } catch {
                 print("Can't delete entry \(error)")
             }
-        }
-    }
-
-    private func decodeAndSetEmail() {
-        do {
-            if let decodedEmail = try SecureKeychainService.shared.retrieveDecrypted(forKey: "userEmail") {
-                email = decodedEmail
-            }
-        } catch {
-            print("Error decoding email: \(error)")
         }
     }
 }
