@@ -54,6 +54,7 @@ struct InitialView: View {
 
             } else {
                 print("Signup failed")
+                UserDefaults.standard.set(true, forKey: "hasCompletedInitialSetup")
             }
         }
     }
